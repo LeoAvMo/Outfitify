@@ -15,7 +15,7 @@ enum DisplayedStylingView: String, CaseIterable, Equatable, Identifiable {
     var localizedName: LocalizedStringKey { LocalizedStringKey(rawValue) }
 }
 
-struct StylingView: View {
+struct MatchView: View {
     @State private var displayedView: DisplayedStylingView = .visualizer
     @State private var showAddView: Bool = false
     
@@ -40,7 +40,7 @@ struct StylingView: View {
                 
             }
             
-            .navigationTitle("Styling")
+            .navigationTitle("Match")
             .navigationBarTitleDisplayMode(.inline)
             
             .sheet(isPresented: $showAddView) {
@@ -51,5 +51,5 @@ struct StylingView: View {
 }
 
 #Preview {
-    StylingView()
+    MatchView()
 }

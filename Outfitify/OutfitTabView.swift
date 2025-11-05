@@ -15,15 +15,15 @@ struct OutfitTabView: View {
                 
             }
             
-            Tab("Planner", systemImage: "calendar") {
+            Tab("My Week", systemImage: "calendar") {
                 
             }
             
-            Tab ("Styling", systemImage: "tshirt"){
-                StylingView()
+            Tab ("Match", systemImage: "hanger"){
+                MatchView()
             }
             
-            Tab("Wardrobe", systemImage: "cabinet.fill") {
+            Tab("Outfits", systemImage: "tshirt") {
                 
             }
             
