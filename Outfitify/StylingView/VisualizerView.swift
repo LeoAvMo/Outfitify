@@ -69,6 +69,13 @@ struct VisualizerView: View {
             }
             
         }
+        .toolbar {
+            Button("Share", systemImage: "square.and.arrow.up"){
+            }
+            Button("Save", systemImage: "square.and.arrow.down"){
+                
+            }
+        }
     }
 }
 

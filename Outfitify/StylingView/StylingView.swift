@@ -29,12 +29,20 @@ struct StylingView: View {
                 }
                 .pickerStyle(.segmented)
                 
-                if displayedView == .visualizer {
+                switch displayedView {
+                case .visualizer:
                     VisualizerView(showAddView: $showAddView)
+                case .canvas:
+                    Spacer()
+                    Text("Canvas View")
+                    Spacer()
                 }
+                
             }
+            
             .navigationTitle("Styling")
             .navigationBarTitleDisplayMode(.inline)
+            
             .sheet(isPresented: $showAddView) {
                 Text("Hello")
             }
