@@ -20,7 +20,7 @@ struct OutfitTabView: View {
             }
             
             Tab ("Styling", systemImage: "tshirt"){
-                
+                StylingView()
             }
             
             Tab("Wardrobe", systemImage: "cabinet.fill") {

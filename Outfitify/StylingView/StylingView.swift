@@ -17,6 +17,8 @@ enum DisplayedStylingView: String, CaseIterable, Equatable, Identifiable {
 
 struct StylingView: View {
     @State private var displayedView: DisplayedStylingView = .visualizer
+    @State private var showAddView: Bool = false
+    
     var body: some View {
         NavigationStack {
             Group {
@@ -26,15 +28,15 @@ struct StylingView: View {
                     }
                 }
                 .pickerStyle(.segmented)
+                
+                if displayedView == .visualizer {
+                    VisualizerView(showAddView: $showAddView)
+                }
             }
             .navigationTitle("Styling")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Add Items", systemImage: "plus") {
-                        
-                    }
-                }
+            .sheet(isPresented: $showAddView) {
+                Text("Hello")
             }
         }
     }
