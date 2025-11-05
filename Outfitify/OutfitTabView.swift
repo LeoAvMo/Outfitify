@@ -11,11 +11,15 @@ struct OutfitTabView: View {
     var body: some View {
         TabView{
             
+            Tab("Generate", systemImage: "sparkles"){
+                
+            }
+            
             Tab("Planner", systemImage: "calendar") {
                 
             }
             
-            Tab ("Styling", systemImage: "sparkles"){
+            Tab ("Styling", systemImage: "tshirt"){
                 
             }
             

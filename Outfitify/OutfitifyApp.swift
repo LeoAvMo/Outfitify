@@ -25,7 +25,7 @@ struct OutfitifyApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            OutfitTabView()
         }
         .modelContainer(sharedModelContainer)
     }
