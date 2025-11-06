@@ -37,7 +37,6 @@ struct ClothingTypeButtonView: View {
         ZStack{
             RoundedRectangle(cornerRadius: 40)
                 .stroke(.black, lineWidth: 3)
-                .frame(height: 120)
             HStack{
                 Text(emoji)
                     .font(.system(size: 60))
@@ -48,5 +47,6 @@ struct ClothingTypeButtonView: View {
             }
             .padding(.horizontal)
         }
+        .frame(height: 120)
     }
 }

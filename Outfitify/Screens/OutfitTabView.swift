@@ -12,7 +12,7 @@ struct OutfitTabView: View {
         TabView{
             
             Tab("Generate", systemImage: "sparkles"){
-                
+                GenerateView()
             }
             
             Tab("My Week", systemImage: "calendar") {
