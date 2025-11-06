@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MyWeek: View {
+struct MyWeekView: View {
     @State private var selectedDate: Date = Date.now
     var body: some View {
         NavigationStack{
@@ -36,7 +36,7 @@ struct MyWeek: View {
     
 
 #Preview {
-    MyWeek()
+    MyWeekView()
 }
 
 

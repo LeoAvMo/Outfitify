@@ -16,7 +16,7 @@ struct OutfitTabView: View {
             }
             
             Tab("My Week", systemImage: "calendar") {
-                MyWeek()
+                MyWeekView()
             }
             
             Tab ("Match", systemImage: "hanger"){
