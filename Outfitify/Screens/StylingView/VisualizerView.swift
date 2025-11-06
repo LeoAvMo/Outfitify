@@ -11,7 +11,7 @@ struct VisualizerView: View {
     @Binding var showAddView: Bool
     
     var body: some View {
-        VStack(alignment: .leading){
+        VStack(alignment: .leading, spacing: 10){
             // MARK: Headwear ScrollView
             Button {
                 showAddView.toggle()
@@ -23,7 +23,10 @@ struct VisualizerView: View {
             ScrollView(.horizontal) {
                 LazyHStack{
                     Image(systemName: "xmark")
-                        .foregroundStyle(.black)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 85, height: 85)
+                        .padding(.horizontal)
                 }
             }
             
@@ -58,7 +61,7 @@ struct VisualizerView: View {
             Button {
                 showAddView.toggle()
             } label: {
-                TappableSubtitleView(text: "Shoes")
+                TappableSubtitleView(text: "Footwear")
             }
             .buttonStyle(.plain)
             ScrollView(.horizontal) {

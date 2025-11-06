@@ -15,7 +15,7 @@ struct GenerateView: View {
                     ClothingTypeButtonView(emoji: "👒", clothingType: "Headwear")
                     ClothingTypeButtonView(emoji: "👕", clothingType: "Upperwear & Full Body")
                     ClothingTypeButtonView(emoji: "👖", clothingType: "Lowerwear")
-                    ClothingTypeButtonView(emoji: "👟", clothingType: "Shoes")
+                    ClothingTypeButtonView(emoji: "👟", clothingType: "Footwear")
                 }
                 .padding()
             }
