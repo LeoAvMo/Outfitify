@@ -7,13 +7,7 @@
 
 import SwiftUI
 
-enum DisplayedStylingView: String, CaseIterable, Equatable, Identifiable {
-    case visualizer = "Visualizer"
-    case canvas = "Canvas"
-    
-    var id: Self { self }
-    var localizedName: LocalizedStringKey { LocalizedStringKey(rawValue) }
-}
+
 
 struct MatchView: View {
     @State private var displayedView: DisplayedStylingView = .visualizer
@@ -32,6 +26,8 @@ struct MatchView: View {
                 switch displayedView {
                 case .visualizer:
                     VisualizerView(showAddView: $showAddView)
+                        .padding(.top)
+                    Spacer()
                 case .canvas:
                     Spacer()
                     Text("Canvas View")
@@ -45,6 +41,7 @@ struct MatchView: View {
             
             .sheet(isPresented: $showAddView) {
                 Text("Hello")
+                    .presentationDetents([.medium])
             }
         }
     }
@@ -52,4 +49,12 @@ struct MatchView: View {
 
 #Preview {
     MatchView()
+}
+
+enum DisplayedStylingView: String, CaseIterable, Equatable, Identifiable {
+    case visualizer = "Visualizer"
+    case canvas = "Canvas"
+    
+    var id: Self { self }
+    var localizedName: LocalizedStringKey { LocalizedStringKey(rawValue) }
 }
