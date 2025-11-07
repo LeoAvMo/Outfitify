@@ -73,19 +73,25 @@ struct WeekCalendarView: View {
                 
                 LazyHGrid(rows: rows){
                     ForEach(weekdays, id: \.self) { day in
+                        var isSelected: Bool {
+                            Calendar.current.isDate(selectedDate, equalTo: day, toGranularity: .day)
+                        }
+                        
                         Text(day.formatted(.dateTime.weekday(.abbreviated)))
                             .padding(.bottom, 4)
+                            .bold(isSelected)
+                        
                         Button {
                             selectedDate = day
                         } label: {
                             ZStack{
-                                if Calendar.current.isDate(selectedDate, equalTo: day, toGranularity: .day) {
+                                if isSelected {
                                     Circle()
                                         .foregroundStyle(.accent)
                                         .scaledToFit()
-                                        
                                 }
                                 Text(day.formatted(.dateTime.day()))
+                                    .bold(isSelected)
                             }
                             .frame(width: 35, height: 35)
                         }
