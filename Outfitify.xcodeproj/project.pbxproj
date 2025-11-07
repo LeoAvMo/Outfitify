@@ -16,6 +16,11 @@
 			path = Outfitify;
 			sourceTree = "<group>";
 		};
+		CAC8EA872EBD02150069E8C9 /* Models */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Models;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -34,6 +39,7 @@
 			children = (
 				CA392A4A2EBB54FE0087368D /* Outfitify */,
 				CA392A492EBB54FE0087368D /* Products */,
+				CAC8EA872EBD02150069E8C9 /* Models */,
 			);
 			sourceTree = "<group>";
 		};
@@ -62,6 +68,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				CA392A4A2EBB54FE0087368D /* Outfitify */,
+				CAC8EA872EBD02150069E8C9 /* Models */,
 			);
 			name = Outfitify;
 			packageProductDependencies = (

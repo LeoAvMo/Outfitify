@@ -12,64 +12,6 @@ struct VisualizerView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10){
-            // MARK: Headwear ScrollView
-            Button {
-                showAddView.toggle()
-            } label: {
-                TappableSubtitleView(text: "Headwear")
-            }
-            .buttonStyle(.plain)
-            
-            ScrollView(.horizontal) {
-                LazyHStack{
-                    Image(systemName: "xmark")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 85, height: 85)
-                        .padding(.horizontal)
-                }
-            }
-            
-            // MARK: Tops ScrollView
-            Button {
-                showAddView.toggle()
-            } label: {
-                TappableSubtitleView(text: "Upperwear & Full Body")
-            }
-            .buttonStyle(.plain)
-            ScrollView(.horizontal) {
-                LazyHStack{
-                    Image(systemName: "xmark")
-                        .foregroundStyle(.black)
-                }
-            }
-            
-            Button {
-                showAddView.toggle()
-            } label: {
-                TappableSubtitleView(text: "Lowerwear")
-            }
-            .buttonStyle(.plain)
-            ScrollView(.horizontal) {
-                LazyHStack{
-                    Image(systemName: "xmark")
-                        .foregroundStyle(.black)
-
-                }
-            }
-            
-            Button {
-                showAddView.toggle()
-            } label: {
-                TappableSubtitleView(text: "Footwear")
-            }
-            .buttonStyle(.plain)
-            ScrollView(.horizontal) {
-                LazyHStack{
-                    Image(systemName: "xmark")
-                        .foregroundStyle(.black)
-                }
-            }
             
         }
         .toolbar {
@@ -88,17 +30,53 @@ struct VisualizerView: View {
 
 
 struct TappableSubtitleView: View {
-    var text: String
+    @State public var clothingType: ClothingType
+    @Binding var showAddView: Bool
     
     var body: some View {
-        Text(text)
-            .font(.title2)
-            .foregroundStyle(.primary)
-            .fontWeight(.semibold)
+        VStack(alignment: .leading, spacing: 5) {
+            
+            HStack{
+                Text(clothingType.rawValue)
+                    .font(.title)
+                    .foregroundStyle(.primary)
+                    .fontWeight(.semibold)
+                Spacer()
+                Button("Add", systemImage: "plus") {
+                    // Returh the view and show sheet
+                    // showedView = 
+                    showAddView.toggle()
+                }
+                .buttonStyle(.glassProminent)
+            }
+            
+            ScrollView(.horizontal) {
+                LazyHStack{
+                    Image(systemName: "xmark")
+                        .resizable()
+                        .scaledToFit()
+                        .clipShape(RoundedRectangle(cornerRadius: 40))
+                        .frame(width: 85, height: 85)
+                        .padding(.horizontal, 3)
+                    
+                    ZStack{
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(.black, lineWidth: 2)
+                        Image("placeholderDress")
+                            .resizable()
+                            .scaledToFit()
+                            
+                    }
+                    .frame(width: 85, height: 85)
+                    .padding(.horizontal, 3)
+                }
+            }
+            .scrollIndicators(.hidden)
+            
+            
+        }
         
-        Image(systemName: "plus")
-            .font(.title2)
-            .foregroundStyle(.accent)
-            .fontWeight(.semibold)
+        
+        
     }
 }
