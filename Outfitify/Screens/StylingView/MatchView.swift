@@ -29,8 +29,9 @@ struct MatchView: View {
                         .padding(.top)
                     Spacer()
                 case .accessories:
-                    Spacer()
+                    
                     AccessoriesView()
+                        
                     Spacer()
                 }
             }

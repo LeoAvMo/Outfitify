@@ -8,8 +8,40 @@
 import SwiftUI
 
 struct AccessoriesView: View {
+    let columns: [GridItem] = [GridItem(.fixed(120)),GridItem(.fixed(120)),GridItem(.fixed(120))]
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack{
+            ScrollView {
+                HStack {
+                    Text("Accessories")
+                        .font(.title)
+                        .foregroundStyle(.primary)
+                        .fontWeight(.semibold)
+                    Spacer()
+                }
+                .padding(.top, 20)
+                .padding(.horizontal)
+                
+                LazyVGrid(columns: columns) {
+                    Button {
+                        
+                    } label: {
+                        RoundedRectangle(cornerRadius: 18)
+                            .stroke(Color("secColor"), lineWidth: 2)
+                            .frame(height: 120)
+                    }
+                    
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Add", systemImage: "plus"){
+                        
+                    }
+                }
+            }
+        }
+        
     }
 }
 
