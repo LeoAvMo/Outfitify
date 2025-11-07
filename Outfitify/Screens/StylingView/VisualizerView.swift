@@ -12,7 +12,7 @@ struct VisualizerView: View {
     @Binding var showAddView: Bool
     
     var body: some View {
-        VStack(alignment: .leading){
+        VStack(alignment: .leading, spacing: 20){
             TappableSubtitleView(clothingType: .headwear, showAddView: $showAddView)
             TappableSubtitleView(clothingType: .topwear, showAddView: $showAddView)
             TappableSubtitleView(clothingType: .lowerwear, showAddView: $showAddView)
@@ -65,11 +65,14 @@ struct TappableSubtitleView: View {
                 }
                 .buttonStyle(.glassProminent)
             }
+            .padding(.vertical, 1)
             .padding(.horizontal)
             
             ScrollView(.horizontal) {
                 LazyHStack {
-                    
+                    /*
+                     For clothing in clothes, get the image and
+                     */
                     ZStack{
                         RoundedRectangle(cornerRadius: 8)
                             .stroke(.accent, lineWidth: 3)
@@ -80,7 +83,7 @@ struct TappableSubtitleView: View {
                     }
                     .frame(width: 85, height: 85)
                     .padding(.horizontal, 3)
-                    
+                   
                     Image(systemName: "xmark")
                         .foregroundStyle(.red)
                         .font(.largeTitle)
@@ -90,7 +93,7 @@ struct TappableSubtitleView: View {
                 }
             }
             .scrollIndicators(.hidden)
-            .frame(height: 90)
+            .frame(height: 88)
         }
     }
 }
