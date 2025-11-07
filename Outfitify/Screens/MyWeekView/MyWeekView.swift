@@ -45,7 +45,7 @@ struct MyWeekView: View {
 struct WeekCalendarView: View {
     @Binding var selectedDate: Date
     
-    let rows = [GridItem(), GridItem()]
+    let rows = [GridItem(.fixed(10)), GridItem(.fixed(40))]
     var weekdays: [Date] {
             getWeekDates(for: selectedDate, using: .gregorian)
     }

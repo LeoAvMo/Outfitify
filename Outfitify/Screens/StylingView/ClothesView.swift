@@ -10,13 +10,17 @@ import SwiftData
 
 struct ClothesView: View {
     @Binding var showAddView: Bool
+    @State private var selectedHeadwear: Clothing? = nil
+    @State private var selectedTopwear: Clothing? = nil
+    @State private var selectedFootwear: Clothing? = nil
+    @State private var selectedLowerwear: Clothing? = nil
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20){
-            TappableSubtitleView(clothingType: .headwear, showAddView: $showAddView)
-            TappableSubtitleView(clothingType: .topwear, showAddView: $showAddView)
-            TappableSubtitleView(clothingType: .lowerwear, showAddView: $showAddView)
-            TappableSubtitleView(clothingType: .footwear, showAddView: $showAddView)
+            TappableSubtitleView(clothingType: .headwear, showAddView: $showAddView, selectedClothing: $selectedHeadwear)
+            TappableSubtitleView(clothingType: .topwear, showAddView: $showAddView, selectedClothing: $selectedTopwear)
+            TappableSubtitleView(clothingType: .lowerwear, showAddView: $showAddView, selectedClothing: $selectedLowerwear)
+            TappableSubtitleView(clothingType: .footwear, showAddView: $showAddView, selectedClothing: $selectedFootwear)
         }
         .toolbar {
             Button("Share", systemImage: "square.and.arrow.up"){
@@ -34,19 +38,21 @@ struct ClothesView: View {
 }
 
 struct TappableSubtitleView: View {
-    let clothingType: ClothingType
+    var clothingType: ClothingType
     @Binding var showAddView: Bool
-
+    @Binding var selectedClothing: Clothing?
+    
     @Query private var clothes: [Clothing]
+    
+    init(clothingType: ClothingType, showAddView: Binding<Bool>, selectedClothing: Binding<Clothing?>) {
         
-    init(clothingType: ClothingType, showAddView: Binding<Bool>) {
         self.clothingType = clothingType
+        
         self._showAddView = showAddView
+        self._selectedClothing = selectedClothing
         
         let typeRawValue = clothingType.rawValue
-        
         let predicate = #Predicate<Clothing> { $0.clothingType == typeRawValue }
-        
         self._clothes = Query(filter: predicate)
     }
     
@@ -71,26 +77,42 @@ struct TappableSubtitleView: View {
             
             ScrollView(.horizontal) {
                 LazyHStack {
-                    /*
-                     For clothing in clothes, get the image and
-                     */
-                    ZStack{
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(.accent, lineWidth: 3)
-                        Image("placeholderDress")
-                            .resizable()
-                            .scaledToFit()
-                        
+                    ForEach(clothes) { clothing in
+                        Button {
+                            selectedClothing = clothing
+                        } label: {
+                            ZStack{
+                                Image(clothing.image)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                                if selectedClothing == clothing {
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .stroke(.accent, lineWidth: 3)
+                                    Image(systemName: "checkmark.circle.fill")
+                                }
+                            }
+                        }
                     }
                     .frame(width: 85, height: 85)
                     .padding(.horizontal)
-                   
-                    Image(systemName: "xmark")
-                        .foregroundStyle(.red)
-                        .font(.largeTitle)
+                    
+                    Button {
+                        selectedClothing = nil
+                    } label: {
+                        ZStack {
+                            Image(systemName: "xmark")
+                                .foregroundStyle(.red)
+                                .font(.largeTitle)
+                                .bold()
+                            if selectedClothing == nil {
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(.accent, lineWidth: 3)
+                            }
+                        }
                         .frame(width: 85, height: 85)
                         .padding(.horizontal)
-                        .bold()
+                    }
                 }
             }
             .scrollIndicators(.hidden)
