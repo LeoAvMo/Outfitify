@@ -9,11 +9,13 @@ import SwiftUI
 
 struct MyWeekView: View {
     @State private var selectedDate: Date = Date.now
+    
     var body: some View {
         NavigationStack{
             ScrollView {
                 WeekCalendarView(selectedDate: $selectedDate)
                     .padding(.bottom, 50)
+                    
                 ZStack {
                     RoundedRectangle(cornerRadius: 40)
                         .stroke(.black, lineWidth: 3)
@@ -41,33 +43,69 @@ struct MyWeekView: View {
 
 
 struct WeekCalendarView: View {
-    @State private var weekdays = currentWeekDates(using: .current)
     @Binding var selectedDate: Date
     
+    let rows = [GridItem(), GridItem()]
+    var weekdays: [Date] {
+            getWeekDates(for: selectedDate, using: .gregorian)
+    }
+    
     var body: some View {
-        HStack(spacing: 20){
-            ForEach(weekdays, id: \.self) { day in
+        VStack (spacing: 5){
+            HStack{
+                Text(selectedDate.formatted(.dateTime.month(.wide)) + " " + selectedDate.formatted(.dateTime.year()))
+                    .foregroundStyle(.accent)
+                    .font(.largeTitle)
+                    .bold()
+                Spacer()
+            }
+            .padding(.horizontal)
+            
+            HStack{
                 Button {
-                    selectedDate = day
+                    selectedDate.addTimeInterval(-86400*7)
                 } label: {
-                    VStack{
+                    Image(systemName: "arrow.left")
+                        .font(.title)
+                }
+                .buttonStyle(.automatic)
+                .fontWeight(.semibold)
+                
+                LazyHGrid(rows: rows){
+                    ForEach(weekdays, id: \.self) { day in
                         Text(day.formatted(.dateTime.weekday(.abbreviated)))
                             .padding(.bottom, 4)
-                        ZStack{
-                            if Calendar.current.isDate(selectedDate, equalTo: day, toGranularity: .day) {
-                                Circle()
-                                    .foregroundStyle(.accent)
-                                    .scaledToFit()
+                        Button {
+                            selectedDate = day
+                        } label: {
+                            ZStack{
+                                if Calendar.current.isDate(selectedDate, equalTo: day, toGranularity: .day) {
+                                    Circle()
+                                        .foregroundStyle(.accent)
+                                        .scaledToFit()
+                                        
+                                }
+                                Text(day.formatted(.dateTime.day()))
                             }
-                            Text(day.formatted(.dateTime.day()))
+                            .frame(width: 35, height: 35)
                         }
-                        .frame(width: 35, height: 35)
+                        .buttonStyle(.plain)
                         
                     }
                 }
-                .buttonStyle(.plain)
                 
+                Button {
+                    selectedDate.addTimeInterval(86400*7)
+                } label: {
+                    Image(systemName: "arrow.right")
+                        .font(.title)
+                }
+                .buttonStyle(.automatic)
+                .fontWeight(.semibold)
             }
         }
+        
+        
+        
     }
 }

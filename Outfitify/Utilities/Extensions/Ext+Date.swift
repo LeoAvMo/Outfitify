@@ -15,8 +15,8 @@ extension Date {
     }
 }
 
-func currentWeekDates(using calendar: Calendar = .gregorian) -> [Date] {
-    let start = Date().startOfWeek(using: calendar)
+func getWeekDates(for date: Date, using calendar: Calendar = .gregorian) -> [Date] {
+    let start = date.startOfWeek(using: calendar) 
     return (0..<7).compactMap { offset in
         calendar.date(byAdding: .day, value: offset, to: start)
     }
