@@ -10,7 +10,7 @@ import SwiftUI
 
 
 struct MatchView: View {
-    @State private var displayedView: DisplayedStylingView = .visualizer
+    @State private var displayedView: DisplayedStylingView = .clothes
     @State private var showAddView: Bool = false
     
     var body: some View {
@@ -24,16 +24,15 @@ struct MatchView: View {
                 .pickerStyle(.segmented)
                 
                 switch displayedView {
-                case .visualizer:
-                    VisualizerView(showAddView: $showAddView)
+                case .clothes:
+                    ClothesView(showAddView: $showAddView)
                         .padding(.top)
                     Spacer()
-                case .canvas:
+                case .accessories:
                     Spacer()
-                    Text("Canvas View")
+                    AccessoriesView()
                     Spacer()
                 }
-                
             }
             .navigationTitle("Match")
             .navigationBarTitleDisplayMode(.inline)
@@ -48,8 +47,8 @@ struct MatchView: View {
 }
 
 enum DisplayedStylingView: String, CaseIterable, Equatable, Identifiable {
-    case visualizer = "Visualizer"
-    case canvas = "Canvas"
+    case clothes = "Clothes"
+    case accessories = "Accessories"
     
     var id: Self { self }
     var localizedName: LocalizedStringKey { LocalizedStringKey(rawValue) }
