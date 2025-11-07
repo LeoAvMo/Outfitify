@@ -35,14 +35,10 @@ struct MatchView: View {
                 }
                 
             }
-            
             .navigationTitle("Match")
             .navigationBarTitleDisplayMode(.inline)
             
-            .sheet(isPresented: $showAddView) {
-                Text("Hello")
-                    .presentationDetents([.medium])
-            }
+            
         }
     }
 }

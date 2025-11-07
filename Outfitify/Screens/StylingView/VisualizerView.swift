@@ -30,6 +30,7 @@ struct VisualizerView: View {
 
 #Preview {
     VisualizerView(showAddView: .constant(false))
+        .modelContainer(for: Clothing.self, inMemory: true)
 }
 
 struct TappableSubtitleView: View {
@@ -82,7 +83,7 @@ struct TappableSubtitleView: View {
                         
                     }
                     .frame(width: 85, height: 85)
-                    .padding(.horizontal, 3)
+                    .padding(.horizontal)
                    
                     Image(systemName: "xmark")
                         .foregroundStyle(.red)
@@ -94,6 +95,10 @@ struct TappableSubtitleView: View {
             }
             .scrollIndicators(.hidden)
             .frame(height: 88)
+        }
+        .sheet(isPresented: $showAddView) {
+            AddOutfitView(clothingType: clothingType)
+                .presentationDetents([.medium])
         }
     }
 }
