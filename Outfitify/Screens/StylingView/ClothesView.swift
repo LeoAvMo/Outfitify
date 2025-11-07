@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct VisualizerView: View {
+struct ClothesView: View {
     @Binding var showAddView: Bool
     
     var body: some View {
@@ -29,7 +29,7 @@ struct VisualizerView: View {
 }
 
 #Preview {
-    VisualizerView(showAddView: .constant(false))
+    ClothesView(showAddView: .constant(false))
         .modelContainer(for: Clothing.self, inMemory: true)
 }
 
