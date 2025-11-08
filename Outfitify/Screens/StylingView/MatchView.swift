@@ -30,8 +30,7 @@ struct MatchView: View {
                     Spacer()
                 case .accessories:
                     
-                    AccessoriesView()
-                        
+                    AccessoriesView(showSheet: $showAddView)
                     Spacer()
                 }
             }

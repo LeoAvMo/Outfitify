@@ -87,7 +87,7 @@ struct WeekCalendarView: View {
                             ZStack{
                                 if isSelected {
                                     Circle()
-                                        .foregroundStyle(.accent)
+                                        .foregroundStyle(.sec)
                                         .scaledToFit()
                                 }
                                 Text(day.formatted(.dateTime.day()))

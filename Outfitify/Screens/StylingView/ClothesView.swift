@@ -71,6 +71,7 @@ struct TappableSubtitleView: View {
                         .font(.title)
                 }
                 .buttonStyle(.glassProminent)
+                
             }
             .padding(.vertical, 1)
             .padding(.horizontal)
@@ -107,7 +108,7 @@ struct TappableSubtitleView: View {
                                 .bold()
                             if selectedClothing == nil {
                                 RoundedRectangle(cornerRadius: 8)
-                                    .stroke(.accent, lineWidth: 3)
+                                    .stroke(.sec, lineWidth: 3)
                             }
                         }
                         .frame(width: 85, height: 85)
