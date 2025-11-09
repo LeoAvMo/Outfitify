@@ -12,10 +12,29 @@ struct GenerateView: View {
         NavigationStack{
             ScrollView{
                 LazyVStack(spacing: 30){
-                    ClothingTypeButtonView(emoji: "👒", clothingType: "Headwear")
-                    ClothingTypeButtonView(emoji: "👕", clothingType: "Upperwear & Full Body")
-                    ClothingTypeButtonView(emoji: "👖", clothingType: "Lowerwear")
-                    ClothingTypeButtonView(emoji: "👟", clothingType: "Footwear")
+                    NavigationLink{
+                        Text("Hello")
+                    } label: {
+                        ClothingTypeButtonView(emoji: "👒", clothingType: "Headwear")
+                    }
+                    
+                    NavigationLink{
+                        Text("Hello")
+                    } label: {
+                        ClothingTypeButtonView(emoji: "👕", clothingType: "Upperwear & Full Body")
+                    }
+                    
+                    NavigationLink{
+                        Text("Hello")
+                    } label: {
+                        ClothingTypeButtonView(emoji: "👖", clothingType: "Lowerwear")
+                    }
+                    
+                    NavigationLink{
+                        Text("Hello")
+                    } label: {
+                        ClothingTypeButtonView(emoji: "👟", clothingType: "Footwear")
+                    }
                 }
                 .padding()
             }
@@ -34,7 +53,7 @@ struct ClothingTypeButtonView: View {
     var emoji: String
     var clothingType: String
     var body: some View {
-        ZStack{
+        ZStack {
             RoundedRectangle(cornerRadius: 40)
                 .stroke(.black, lineWidth: 3)
             HStack{
@@ -43,9 +62,11 @@ struct ClothingTypeButtonView: View {
                     .frame(width: 70)
                 Text(clothingType)
                     .font(.largeTitle)
+                    .multilineTextAlignment(.leading)
                 Spacer()
             }
             .padding(.horizontal)
+            
         }
         .frame(height: 120)
     }

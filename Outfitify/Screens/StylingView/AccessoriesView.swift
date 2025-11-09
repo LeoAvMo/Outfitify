@@ -50,9 +50,8 @@ struct AccessoriesView: View {
             AddAccessoryView()
         }
         .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
+            ToolbarItem(placement: .topBarTrailing) {
                 Button("Add", systemImage: "plus"){
-                    
                     showSheet.toggle()
                 }
             }
