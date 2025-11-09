@@ -15,7 +15,7 @@ struct GenerateView: View {
                 
                 ForEach(ClothingType.allCases) { clothType in
                     NavigationLink{
-                        PersonalizationView()
+                        PersonalizationView(clothingType: clothType)
                     } label: {
                         ClothingTypeButtonView(emoji: clothType.emoji(), clothingType: clothType.rawValue)
                     }
