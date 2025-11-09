@@ -7,14 +7,21 @@
 
 import SwiftUI
 
-let colors = ["Red": Color.red,
-             "Orange": Color.orange,
-             "Yellow": Color.yellow,
-              "Green": Color.green,
-              "Blue": Color.blue,
-              "Indigo": Color.indigo,
-              "Purple": Color.purple,
-              "Pink": Color(red: 251/255, green: 117/255, blue: 166/255),
-              "White": Color.white,
-              "Black": Color.black,
-              "Brown": Color.brown]
+struct GenerableColor: Hashable{
+    let name: String
+    let color: Color
+}
+
+let generableColors: [GenerableColor] = [
+    GenerableColor(name: "Red",    color: .red),
+    GenerableColor(name: "Orange", color: .orange),
+    GenerableColor(name: "Yellow", color: .yellow),
+    GenerableColor(name: "Green",  color: .green),
+    GenerableColor(name: "Blue",   color: .blue),
+    GenerableColor(name: "Indigo", color: .indigo),
+    GenerableColor(name: "Purple", color: .purple),
+    GenerableColor(name: "Pink",   color: Color(red: 251/255, green: 117/255, blue: 166/255)),
+    GenerableColor(name: "White",  color: .white),
+    GenerableColor(name: "Black",  color: .black),
+    GenerableColor(name: "Brown",  color: .brown)
+]

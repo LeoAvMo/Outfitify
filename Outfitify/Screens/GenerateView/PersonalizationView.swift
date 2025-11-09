@@ -14,11 +14,12 @@ struct PersonalizationView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Picker(selection: /*@START_MENU_TOKEN@*/.constant(1)/*@END_MENU_TOKEN@*/, label: Text("Color")) {
-                    /*@START_MENU_TOKEN@*/Text("1").tag(1)/*@END_MENU_TOKEN@*/
-                    /*@START_MENU_TOKEN@*/Text("2").tag(2)/*@END_MENU_TOKEN@*/
+                Picker(selection: $color, label: Text("Color")) {
+                    ForEach(generableColors, id: \.self) { col in
+                        ColorWithLabel(color: col.color, label: col.name).tag(col)
+                    }
                 }
-                .pickerStyle(.inline)
+                .pickerStyle(.navigationLink)
             }
             .navigationTitle(Text("Create \(clothingType.rawValue)"))
         }
@@ -27,4 +28,17 @@ struct PersonalizationView: View {
 
 #Preview {
     PersonalizationView(clothingType: .headwear)
+}
+
+struct ColorWithLabel: View {
+    var color: Color
+    var label: String
+    var body: some View {
+        HStack{
+            Circle()
+                .foregroundStyle(color)
+            Text(label)
+        }
+        
+    }
 }
