@@ -26,10 +26,9 @@ struct MatchView: View {
                 switch displayedView {
                 case .clothes:
                     ClothesView(showAddView: $showAddView)
-                        .padding(.top)
+                        
                     Spacer()
                 case .accessories:
-                    
                     AccessoriesView(showSheet: $showAddView)
                     Spacer()
                 }

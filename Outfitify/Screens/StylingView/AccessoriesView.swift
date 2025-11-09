@@ -24,27 +24,37 @@ struct AccessoriesView: View {
                     .fontWeight(.semibold)
                 Spacer()
             }
-            .padding(.top, 20)
             .padding(.horizontal)
-
-            LazyVGrid(columns: columns) {
-                ForEach(accessories) { accessory in
-                    NavigationLink {
-                        EditAccessoryView(accessoryToEdit: accessory)
-                    } label: {
-                        ZStack{
-                            Image(accessory.image)
-                                .resizable()
-                                .scaledToFit()
-                                .clipShape(RoundedRectangle(cornerRadius: 18))
-                            RoundedRectangle(cornerRadius: 18)
-                                .stroke(Color("secColor"), lineWidth: 3)
+            if accessories.isEmpty {
+                VStack {
+                    
+                    ContentUnavailableView("No Acccesories found", systemImage: "crown.fill", description: Text("It looks like there are no accessories to display. Add a new accessory to get started!"))
+                    
+                }
+                
+            } else {
+                LazyVGrid(columns: columns) {
+                    
+                    ForEach(accessories) { accessory in
+                        NavigationLink {
+                            EditAccessoryView(accessoryToEdit: accessory)
+                        } label: {
+                            ZStack{
+                                Image(accessory.image)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .clipShape(RoundedRectangle(cornerRadius: 18))
+                                RoundedRectangle(cornerRadius: 18)
+                                    .stroke(Color("secColor"), lineWidth: 3)
+                            }
+                            .frame(height: 120)
+                            
                         }
-                        .frame(height: 120)
-                        
                     }
                 }
             }
+            
+            
         }
         .sheet(isPresented: $showSheet) {
             AddAccessoryView()

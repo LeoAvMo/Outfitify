@@ -16,11 +16,13 @@ struct ClothesView: View {
     @State private var selectedLowerwear: Clothing? = nil
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 20){
-            TappableSubtitleView(clothingType: .headwear, showAddView: $showAddView, selectedClothing: $selectedHeadwear)
-            TappableSubtitleView(clothingType: .topwear, showAddView: $showAddView, selectedClothing: $selectedTopwear)
-            TappableSubtitleView(clothingType: .lowerwear, showAddView: $showAddView, selectedClothing: $selectedLowerwear)
-            TappableSubtitleView(clothingType: .footwear, showAddView: $showAddView, selectedClothing: $selectedFootwear)
+        ScrollView{
+            LazyVStack(alignment: .leading, spacing: 20){
+                TappableSubtitleView(clothingType: .headwear, showAddView: $showAddView, selectedClothing: $selectedHeadwear)
+                TappableSubtitleView(clothingType: .topwear, showAddView: $showAddView, selectedClothing: $selectedTopwear)
+                TappableSubtitleView(clothingType: .lowerwear, showAddView: $showAddView, selectedClothing: $selectedLowerwear)
+                TappableSubtitleView(clothingType: .footwear, showAddView: $showAddView, selectedClothing: $selectedFootwear)
+            }
         }
         .toolbar {
             Button("Share", systemImage: "square.and.arrow.up"){
@@ -57,68 +59,70 @@ struct TappableSubtitleView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack{
-                Text(clothingType.rawValue)
-                    .font(.title)
-                    .foregroundStyle(.primary)
-                    .fontWeight(.semibold)
-                Spacer()
-                Button {
-                    showAddView.toggle()
-                } label: {
-                    Image(systemName: "plus")
+        
+            VStack(alignment: .leading) {
+                HStack{
+                    Text(clothingType.rawValue)
                         .font(.title)
-                }
-                .buttonStyle(.glassProminent)
-                
-            }
-            .padding(.vertical, 1)
-            .padding(.horizontal)
-            
-            ScrollView(.horizontal) {
-                LazyHStack {
-                    ForEach(clothes) { clothing in
-                        Button {
-                            selectedClothing = clothing
-                        } label: {
-                            ZStack{
-                                Image(clothing.image)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                                if selectedClothing == clothing {
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .stroke(.accent, lineWidth: 3)
-                                    Image(systemName: "checkmark.circle.fill")
-                                }
-                            }
-                        }
-                    }
-                    .frame(width: 85, height: 85)
-                    .padding(.horizontal)
-                    
+                        .foregroundStyle(.primary)
+                        .fontWeight(.semibold)
+                    Spacer()
                     Button {
-                        selectedClothing = nil
+                        showAddView.toggle()
                     } label: {
-                        ZStack {
-                            Image(systemName: "xmark")
-                                .foregroundStyle(.red)
-                                .font(.largeTitle)
-                                .bold()
-                            if selectedClothing == nil {
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(.sec, lineWidth: 3)
+                        Image(systemName: "plus")
+                            .font(.title)
+                    }
+                    .buttonStyle(.glassProminent)
+                    
+                }
+                .padding(.vertical, 1)
+                .padding(.horizontal)
+                
+                ScrollView(.horizontal) {
+                    LazyHStack {
+                        ForEach(clothes) { clothing in
+                            Button {
+                                selectedClothing = clothing
+                            } label: {
+                                ZStack{
+                                    Image(clothing.image)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                                    if selectedClothing == clothing {
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .stroke(.accent, lineWidth: 3)
+                                        Image(systemName: "checkmark.circle.fill")
+                                    }
+                                }
                             }
                         }
                         .frame(width: 85, height: 85)
                         .padding(.horizontal)
+                        
+                        Button {
+                            selectedClothing = nil
+                        } label: {
+                            ZStack {
+                                Image(systemName: "xmark")
+                                    .foregroundStyle(.red)
+                                    .font(.largeTitle)
+                                    .bold()
+                                if selectedClothing == nil {
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .stroke(.sec, lineWidth: 3)
+                                }
+                            }
+                            .frame(width: 85, height: 85)
+                            .padding(.horizontal)
+                        }
                     }
                 }
+                .scrollIndicators(.hidden)
+                .frame(height: 88)
             }
-            .scrollIndicators(.hidden)
-            .frame(height: 88)
-        }
+        
         .sheet(isPresented: $showAddView) {
             AddOutfitView(clothingType: clothingType)
                 .presentationDetents([.medium])
