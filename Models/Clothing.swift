@@ -25,5 +25,13 @@ enum ClothingType: String, CaseIterable, Identifiable, Codable {
     case lowerwear = "Lowerwear"
     case footwear = "Footwear"
     
+    func emoji() -> String {
+        switch self {
+        case .headwear: return "👒"
+        case .topwear: return "👚"
+        case .lowerwear: return "👖"
+        case .footwear: return "👟"
+        }
+    }
     var id: Self { self }
 }

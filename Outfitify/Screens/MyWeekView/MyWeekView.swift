@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MyWeekView: View {
     @State private var selectedDate: Date = Date.now
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         NavigationStack{
@@ -18,7 +19,7 @@ struct MyWeekView: View {
                     
                 ZStack {
                     RoundedRectangle(cornerRadius: 40)
-                        .stroke(.black, lineWidth: 3)
+                        .stroke(colorScheme == .dark ? Color.white : Color.black, lineWidth: 3)
                         .foregroundStyle(.background)
                         .frame(width: 350, height: 500)
                     

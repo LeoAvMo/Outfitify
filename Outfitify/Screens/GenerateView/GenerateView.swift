@@ -8,36 +8,21 @@
 import SwiftUI
 
 struct GenerateView: View {
+    
     var body: some View {
         NavigationStack{
-            ScrollView{
-                LazyVStack(spacing: 30){
+            VStack(spacing: 20) {
+                
+                ForEach(ClothingType.allCases) { clothType in
                     NavigationLink{
-                        Text("Hello")
+                        PersonalizationView()
                     } label: {
-                        ClothingTypeButtonView(emoji: "👒", clothingType: "Headwear")
-                    }
-                    
-                    NavigationLink{
-                        Text("Hello")
-                    } label: {
-                        ClothingTypeButtonView(emoji: "👕", clothingType: "Upperwear & Full Body")
-                    }
-                    
-                    NavigationLink{
-                        Text("Hello")
-                    } label: {
-                        ClothingTypeButtonView(emoji: "👖", clothingType: "Lowerwear")
-                    }
-                    
-                    NavigationLink{
-                        Text("Hello")
-                    } label: {
-                        ClothingTypeButtonView(emoji: "👟", clothingType: "Footwear")
+                        ClothingTypeButtonView(emoji: clothType.emoji(), clothingType: clothType.rawValue)
                     }
                 }
-                .padding()
+                
             }
+            .padding(.horizontal)
             .navigationTitle("Generate")
             .navigationBarTitleDisplayMode(.inline)
             
@@ -50,12 +35,14 @@ struct GenerateView: View {
 }
 
 struct ClothingTypeButtonView: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     var emoji: String
     var clothingType: String
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 40)
-                .stroke(.black, lineWidth: 3)
+                .stroke(colorScheme == .dark ? Color.white : Color.black, lineWidth: 3)
             HStack{
                 Text(emoji)
                     .font(.system(size: 60))
