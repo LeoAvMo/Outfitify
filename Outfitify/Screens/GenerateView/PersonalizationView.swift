@@ -10,16 +10,41 @@ import SwiftUI
 
 struct PersonalizationView: View {
     @State public var clothingType: ClothingType
-    @State private var color: Color = .red
+    @State private var selectedColor = generableColors[0]
+    @State private var style: String = styles[0]
+    @State private var weather: String = weathers[0]
+    @State private var pattern: String = patterns[0]
     var body: some View {
         NavigationStack {
             Form {
-                Picker(selection: $color, label: Text("Color")) {
+                Picker(selection: $selectedColor, label: Text("Color")) {
                     ForEach(generableColors, id: \.self) { col in
                         ColorWithLabel(color: col.color, label: col.name).tag(col)
                     }
                 }
                 .pickerStyle(.navigationLink)
+                
+                Picker(selection: $style, label: Text("Style")) {
+                    ForEach(styles, id: \.self) { style in
+                        Text(style).tag(style)
+                    }
+                }
+                .pickerStyle(.navigationLink)
+                
+                Picker(selection: $weather, label: Text("Weather")) {
+                    ForEach(weathers, id: \.self) { weather in
+                        Text(weather).tag(weather)
+                    }
+                }
+                .pickerStyle(.navigationLink)
+                
+                Picker(selection: $pattern, label: Text("Pattern")) {
+                    ForEach(patterns, id: \.self) { pattern in
+                        Text(pattern).tag(pattern)
+                    }
+                }
+                .pickerStyle(.navigationLink)
+                
             }
             .navigationTitle(Text("Create \(clothingType.rawValue)"))
         }
@@ -35,8 +60,16 @@ struct ColorWithLabel: View {
     var label: String
     var body: some View {
         HStack{
-            Circle()
-                .foregroundStyle(color)
+            ZStack {
+                Circle()
+                    .foregroundStyle(.primary)
+                    .frame(width: 33, height: 33)
+                
+                Circle()
+                    .foregroundStyle(color)
+                    .frame(width: 30, height: 30)
+            }
+
             Text(label)
         }
         
