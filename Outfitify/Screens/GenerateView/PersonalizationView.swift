@@ -9,6 +9,10 @@ import SwiftUI
 import UIKit
 import ImagePlayground
 
+/*
+ Programmatic Approach to IamgePlayground retrieved from:
+ https://www.createwithswift.com/generating-images-programmatically-with-image-playground/
+ */
 struct PersonalizationView: View {
     @State public var clothingType: ClothingType
     @State private var selectedColor: GenerableColor?
