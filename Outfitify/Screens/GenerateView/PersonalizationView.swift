@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 import ImagePlayground
 
 struct PersonalizationView: View {
@@ -16,19 +17,18 @@ struct PersonalizationView: View {
     @State private var pattern: String?
     
     
-    @State private var showSheet = false
-    @State private var createdImageURL: URL? = nil
-    @Environment(\.supportsImagePlayground) private var supportsImagePlayground
+    @State var genImages: [CGImage]?
+    @State var genereationStarted: Bool = false
     
+    var isTop: String {
+        if clothingType == .topwear {
+            return "Top"
+        } else {
+            return clothingType.rawValue
+        }
+    }
     var body: some View {
         
-        var clothingTypeString: String {
-            if clothingType == .topwear {
-                return "T-Shirt"
-            } else {
-                return clothingType.rawValue
-            }
-        }
         
         NavigationStack {
             Form {
@@ -60,34 +60,73 @@ struct PersonalizationView: View {
                 }
                 .pickerStyle(.navigationLink)
                 
-                
             }
             .navigationTitle(Text("Create \(clothingType.rawValue)"))
             
-            if supportsImagePlayground {
-              Button("Generate Clothing") {
-                showSheet = true
-              }
+            
+            if let image = genImages  {
+                VStack{
+                    ForEach(image, id: \.self){ selectedImage in
+                        Image(uiImage: UIImage(cgImage: selectedImage))
+                            .resizable()
+                            .frame(width: 200, height: 200)
+                    }
+                }
+            } else {
+
+            }
+            
+            Button {
+                genereationStarted.toggle()
+                Task {
+                    try await generateImage()
+                }
+            } label: {
+                if genereationStarted {
+                    HStack {
+                        ProgressView()
+                        Text("Generating Clothing...")
+                    }
+                }
+                else {
+                    HStack {
+                        Image(systemName: "apple.image.playground")
+                        Text("Generate clothing")
+                    }
+                }
+            }
               .buttonStyle(.glassProminent)
               .disabled(selectedColor == nil ||
                         style == nil ||
                         weather == nil ||
-                        pattern == nil)
-              .imagePlaygroundSheet(
-                    isPresented: $showSheet,
-                    concepts: [
-                        ImagePlaygroundConcept.text("\(clothingTypeString)"),
-                        ImagePlaygroundConcept.text("\(selectedColor?.name ?? "Red")"),
-                        ImagePlaygroundConcept.text("\(style?.dropLast(2) ?? "Simple")"),
-                        ImagePlaygroundConcept.text("\(weather?.dropLast(2) ?? "Sunny")"),
-                        ImagePlaygroundConcept.text("\(pattern?.dropLast(2) ?? "Plain")"),
-                        ]) { url in
-                    createdImageURL = url
-                }
-            } else {
-                Text("Make sure Apple Intelligence is available to generate outfits!")
-            }
+                        pattern == nil || genereationStarted == true)
+        }
+    }
+    
+    func generateImage() async throws {
+        do {
+            let imageCreator = try await ImageCreator()
+            let generationStyle = ImagePlaygroundStyle.animation
             
+            let prompt = "A \(selectedColor?.name ?? "Red") \(isTop) in a \(style?.dropLast(2) ?? "basic") style and a \(pattern?.dropLast(2) ?? "plain") pattern for \(weather?.dropLast(2) ?? "sunny") weather"
+            print(prompt)
+            let images = imageCreator.images(
+                for: [.text(prompt)],   //Prompt
+                style: generationStyle,
+                limit: 1)
+            
+            for try await image in images {
+                if let genImages = genImages {
+                    self.genImages = genImages + [image.cgImage]
+                }
+                else {
+                    self.genImages = [image.cgImage]
+                }
+            }
+
+        }
+        catch ImageCreator.Error.notSupported {
+            print("Image creation not supported on the current device.")
         }
     }
 }
@@ -116,3 +155,5 @@ struct ColorWithLabel: View {
         
     }
 }
+
+

@@ -18,10 +18,7 @@ let styles = [
     "Vintage 📼",
     "Streetwear 🧢",
     "Y2K 💿",
-    "Cottagecore 🌸",
-    "Boho 🌻",
     "Preppy 🎀",
-    "Techwear ⚙️",
     "Sporty 🏃‍♀️"
 ]
 
