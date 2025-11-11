@@ -11,18 +11,20 @@ struct GenerateView: View {
     
     var body: some View {
         NavigationStack{
-            VStack(spacing: 20) {
-                
-                ForEach(ClothingType.allCases) { clothType in
-                    NavigationLink{
-                        PersonalizationView(clothingType: clothType)
-                    } label: {
-                        ClothingTypeButtonView(emoji: clothType.emoji(), clothingType: clothType.rawValue)
+            ScrollView{
+                LazyVStack(spacing: 25) {
+                    
+                    ForEach(ClothingType.allCases) { clothType in
+                        NavigationLink{
+                            PersonalizationView(clothingType: clothType)
+                        } label: {
+                            ClothingTypeButtonView(emoji: clothType.emoji(), clothingType: clothType.rawValue)
+                        }
                     }
+                    
                 }
-                
+                .padding()
             }
-            .padding(.horizontal)
             .navigationTitle("Generate")
             .navigationBarTitleDisplayMode(.inline)
             

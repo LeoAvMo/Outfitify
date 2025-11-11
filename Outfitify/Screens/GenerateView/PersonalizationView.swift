@@ -96,10 +96,16 @@ struct PersonalizationView: View {
                     HStack {
                         Image(systemName: "apple.image.playground")
                         Text("Generate clothing")
+                        
                     }
+                    .font(.title)
+                    .frame(maxWidth: .infinity)
+                    .padding()
                 }
             }
               .buttonStyle(.glassProminent)
+              .padding(.horizontal)
+              .padding(.bottom)
               .disabled(selectedColor == nil ||
                         style == nil ||
                         weather == nil ||

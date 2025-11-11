@@ -6,22 +6,32 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct OutfitsView: View {
-    @State private var totalOutfits: Int = 0
-    @State private var totalClothes: Int = 0
-    @State private var totalAccessories: Int = 0
+    @Environment(\.modelContext) private var modelContext
+    @Query private var accessories: [Accessory]
+    @Query private var clothes: [Clothing]
+    
+    var totalOutfits: Int {
+        clothes.count
+    }
+    
+    var totalAccessories: Int {
+        clothes.count
+    }
+    
+    var totalClothes: Int {
+        clothes.count
+    }
+    
     var body: some View {
         NavigationStack {
             ScrollView {
                 HStack {
-                    VStack {
-                        Text(String(totalOutfits))
-                            .font(.largeTitle)
-                            .bold()
-                        Text("Outfits")
-                            .font(.caption)
-                    }
+                    TotalElementsView(total: totalOutfits, label: "Outfits")
+                    TotalElementsView(total: totalAccessories, label: "Clothes")
+                    TotalElementsView(total: totalAccessories, label: "Accessories")
                 }
             }
             .navigationTitle("Outfits")
@@ -35,4 +45,20 @@ struct OutfitsView: View {
 
 #Preview {
     OutfitsView()
+}
+
+struct TotalElementsView: View {
+    var total: Int
+    var label: String
+    
+    var body: some View {
+        VStack {
+            Text(String(total))
+                .font(.largeTitle)
+                .bold()
+            Text(label)
+                .font(.caption)
+        }
+        .frame(width: 100)
+    }
 }
