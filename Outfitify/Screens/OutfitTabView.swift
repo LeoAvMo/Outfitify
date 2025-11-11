@@ -24,7 +24,7 @@ struct OutfitTabView: View {
             }
             
             Tab("Outfits", systemImage: "tshirt") {
-                
+                OutfitsView()
             }
         }
     }

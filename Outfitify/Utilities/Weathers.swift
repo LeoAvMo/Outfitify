@@ -20,6 +20,5 @@ let weathers = [
     "Humid 💧",
     "Hot 🔥",
     "Cold 🧊",
-    "Rainbow 🌈",
-    "Night Clear 🌙"
+    "Night 🌙"
 ]
