@@ -9,10 +9,12 @@ import SwiftUI
 import SwiftData
 
 @Model
-final class Outfit: {
+final class Outfit {
     var image: String
     // var clothes: [Clothing]
     // var accessories: [Accessory]
     
-    
+    init(image: String = "") {
+        self.image = image
+    }
 }

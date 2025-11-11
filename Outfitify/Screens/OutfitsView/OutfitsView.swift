@@ -10,20 +10,23 @@ import SwiftData
 
 struct OutfitsView: View {
     @Environment(\.modelContext) private var modelContext
+    @Query private var outfits: [Outfit]
     @Query private var accessories: [Accessory]
     @Query private var clothes: [Clothing]
     
     var totalOutfits: Int {
-        clothes.count
-    }
-    
-    var totalAccessories: Int {
-        clothes.count
+        outfits.count
     }
     
     var totalClothes: Int {
         clothes.count
     }
+    
+    var totalAccessories: Int {
+        accessories.count
+    }
+    
+    
     
     var body: some View {
         NavigationStack {

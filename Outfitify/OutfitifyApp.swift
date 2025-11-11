@@ -12,7 +12,7 @@ import SwiftData
 struct OutfitifyApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Clothing.self,Accessory.self
+            Clothing.self, Accessory.self, Outfit.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
