@@ -17,7 +17,7 @@ struct MyWeekView: View {
         NavigationStack{
             ScrollView {
                 WeekCalendarView(selectedDate: $selectedDate)
-                    .padding(.bottom, 50)
+                    .padding(.bottom, 10)
                     
                 ZStack {
                     RoundedRectangle(cornerRadius: 40)
