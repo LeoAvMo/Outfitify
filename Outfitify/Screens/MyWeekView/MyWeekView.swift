@@ -9,6 +9,8 @@ import SwiftUI
 
 struct MyWeekView: View {
     @State private var selectedDate: Date = Date.now
+    @State private var currentOutfit: Image? = nil
+    @State private var showAddOutfit: Bool = false
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
@@ -23,15 +25,41 @@ struct MyWeekView: View {
                         .foregroundStyle(.background)
                         .frame(width: 350, height: 500)
                     
-                    Image(systemName: "tshirt.fill")
-                        .resizable()
-                        .scaledToFit()
+                    if currentOutfit == nil {
+                        VStack{
+                            Button{
+                                showAddOutfit.toggle()
+                            } label: {
+                                ZStack {
+                                    Circle()
+                                        .foregroundStyle(.accent)
+                                    Image(systemName: "plus")
+                                        .foregroundStyle(.primary)
+                                        .font(.largeTitle)
+                                }
+                                .frame(width: 70, height: 80)
+                            }
+                            .buttonStyle(.glassProminent)
+                            .padding(.bottom, 5)
+                            Text("Add Outfit")
+                                .font(.title2)
+                        }
                         .frame(width: 350, height: 500)
-                        .clipShape(RoundedRectangle(cornerRadius: 40))
+                        
+                    } else {
+                        currentOutfit?
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 350, height: 500)
+                            .clipShape(RoundedRectangle(cornerRadius: 40))
+                    }
                 }
             }
             .navigationTitle("My Week")
             .navigationBarTitleDisplayMode(.inline)
+            .sheet(isPresented: $showAddOutfit){
+                Text("Adding Outfit")
+            }
         }
     }
     
