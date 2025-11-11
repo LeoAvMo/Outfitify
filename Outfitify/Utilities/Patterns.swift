@@ -20,7 +20,7 @@ let patterns = [
         "Geometric 🔷",
         "Tie-Dye 🌀",
         "Abstract 🖌️",
-        "Denim Texture 👖",
-        "Leather Texture 🧥",
+        "Denim 👖",
+        "Leather 🧥",
         "Knitted 🧣"    
 ]

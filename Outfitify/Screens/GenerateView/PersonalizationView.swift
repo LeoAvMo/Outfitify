@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import ImagePlayground
 
 struct PersonalizationView: View {
     @State public var clothingType: ClothingType
@@ -15,15 +15,21 @@ struct PersonalizationView: View {
     @State private var weather: String?
     @State private var pattern: String?
     
+    
     @State private var showSheet = false
     @State private var createdImageURL: URL? = nil
-    
-    
-    
-    @State private var imageURL: URL?
     @Environment(\.supportsImagePlayground) private var supportsImagePlayground
     
     var body: some View {
+        
+        var clothingTypeString: String {
+            if clothingType == .topwear {
+                return "T-Shirt"
+            } else {
+                return clothingType.rawValue
+            }
+        }
+        
         NavigationStack {
             Form {
                 Picker(selection: $selectedColor, label: Text("Color")) {
@@ -62,12 +68,26 @@ struct PersonalizationView: View {
               Button("Generate Clothing") {
                 showSheet = true
               }
+              .buttonStyle(.glassProminent)
+              .disabled(selectedColor == nil ||
+                        style == nil ||
+                        weather == nil ||
+                        pattern == nil)
+              .imagePlaygroundSheet(
+                    isPresented: $showSheet,
+                    concepts: [
+                        ImagePlaygroundConcept.text("\(clothingTypeString)"),
+                        ImagePlaygroundConcept.text("\(selectedColor?.name ?? "Red")"),
+                        ImagePlaygroundConcept.text("\(style?.dropLast(2) ?? "Simple")"),
+                        ImagePlaygroundConcept.text("\(weather?.dropLast(2) ?? "Sunny")"),
+                        ImagePlaygroundConcept.text("\(pattern?.dropLast(2) ?? "Plain")"),
+                        ]) { url in
+                    createdImageURL = url
+                }
+            } else {
+                Text("Make sure Apple Intelligence is available to generate outfits!")
             }
-            .buttonStyle(.glassProminent)
-            .disabled(selectedColor == nil ||
-                      style == nil ||
-                      weather == nil ||
-                      pattern == nil)
+            
         }
     }
 }
