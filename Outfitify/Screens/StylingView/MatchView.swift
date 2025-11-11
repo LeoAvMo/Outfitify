@@ -10,6 +10,7 @@ import SwiftUI
 
 
 struct MatchView: View {
+    
     @State private var displayedView: DisplayedStylingView = .clothes
     @State private var showAddView: Bool = false
     

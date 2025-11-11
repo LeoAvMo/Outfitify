@@ -10,10 +10,19 @@ import SwiftUI
 
 struct PersonalizationView: View {
     @State public var clothingType: ClothingType
-    @State private var selectedColor = generableColors[0]
-    @State private var style: String = styles[0]
-    @State private var weather: String = weathers[0]
-    @State private var pattern: String = patterns[0]
+    @State private var selectedColor: GenerableColor?
+    @State private var style: String?
+    @State private var weather: String?
+    @State private var pattern: String?
+    
+    @State private var showSheet = false
+    @State private var createdImageURL: URL? = nil
+    
+    
+    
+    @State private var imageURL: URL?
+    @Environment(\.supportsImagePlayground) private var supportsImagePlayground
+    
     var body: some View {
         NavigationStack {
             Form {
@@ -45,8 +54,20 @@ struct PersonalizationView: View {
                 }
                 .pickerStyle(.navigationLink)
                 
+                
             }
             .navigationTitle(Text("Create \(clothingType.rawValue)"))
+            
+            if supportsImagePlayground {
+              Button("Generate Clothing") {
+                showSheet = true
+              }
+            }
+            .buttonStyle(.glassProminent)
+            .disabled(selectedColor == nil ||
+                      style == nil ||
+                      weather == nil ||
+                      pattern == nil)
         }
     }
 }

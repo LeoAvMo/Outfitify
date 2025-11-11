@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct AccessoriesView: View {
-    
+    @Environment(\.modelContext) private var modelContext
     let columns: [GridItem] = [GridItem(.fixed(120)),GridItem(.fixed(120)),GridItem(.fixed(120))]
     @Binding var showSheet: Bool
     @Query private var accessories: [Accessory]

@@ -44,6 +44,7 @@ struct TappableSubtitleView: View {
     @Binding var showAddView: Bool
     @Binding var selectedClothing: Clothing?
     
+    @Environment(\.modelContext) private var modelContext
     @Query private var clothes: [Clothing]
     
     init(clothingType: ClothingType, showAddView: Binding<Bool>, selectedClothing: Binding<Clothing?>) {
