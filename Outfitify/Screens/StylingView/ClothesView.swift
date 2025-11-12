@@ -87,7 +87,8 @@ struct TappableSubtitleView: View {
                                 selectedClothing = clothing
                             } label: {
                                 ZStack{
-                                    Image(clothing.image)
+                                    // TODO: change it to accept the data type for the Clothing
+                                    Image("placeholderClothing")
                                         .resizable()
                                         .scaledToFit()
                                         .clipShape(RoundedRectangle(cornerRadius: 8))

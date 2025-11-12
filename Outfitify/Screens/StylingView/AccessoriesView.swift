@@ -40,7 +40,8 @@ struct AccessoriesView: View {
                             EditAccessoryView(accessoryToEdit: accessory)
                         } label: {
                             ZStack{
-                                Image(accessory.image)
+                                // TODO: Change it to accept the accessory data
+                                Image("placeholderAccessory")
                                     .resizable()
                                     .scaledToFit()
                                     .clipShape(RoundedRectangle(cornerRadius: 18))
