@@ -10,11 +10,18 @@ import SwiftData
 
 @Model
 final class Outfit {
-    var image: String
-    // var clothes: [Clothing]
-    // var accessories: [Accessory]
     
-    init(image: String = "") {
+    @Attribute(.externalStorage)
+    var image: Data?
+    
+    @Relationship(inverse: \Clothing.outfits)
+    var clothes: [Clothing]?
+    
+    @Relationship(inverse: \Accessory.outfits)
+    var accessories: [Accessory]?
+    
+    init(image: Data? = nil) {
         self.image = image
     }
+    
 }

@@ -10,9 +10,13 @@ import SwiftData
 
 @Model
 final class Accessory {
-    var image: String
     
-    init(image: String = "placeholderAccessory") {
+    @Attribute(.externalStorage)
+    var image: Data?
+    
+    var outfits: [Outfit]?
+    
+    init(image: Data? = nil) {
         self.image = image
     }
 }

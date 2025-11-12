@@ -10,10 +10,14 @@ import SwiftData
 
 @Model
 final class Clothing {
-    var image: String
-    var clothingType: ClothingType.RawValue
     
-    init(image: String = "placeholderClothing", clothingType: ClothingType = .topwear) {
+    @Attribute(.externalStorage)
+    var image: Data?
+    
+    var clothingType: ClothingType.RawValue
+    var outfits: [Outfit]?
+    
+    init(image: Data? = nil, clothingType: ClothingType = .topwear) {
         self.image = image
         self.clothingType = clothingType.rawValue
     }
