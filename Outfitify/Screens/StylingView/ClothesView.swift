@@ -126,7 +126,7 @@ struct TappableSubtitleView: View {
             }
         
         .sheet(isPresented: $showAddView) {
-            AddOutfitView(clothingType: clothingType)
+            AddClothingView(clothingType: clothingType)
         }
     }
 }

@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 import PhotosUI
 import CoreTransferable
 
-struct AddOutfitView: View {
+struct AddClothingView: View {
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @State public var clothingType: ClothingType
     
@@ -35,6 +37,9 @@ struct AddOutfitView: View {
                 .task(id: imageSelection) {
                     image = try? await imageSelection?
                         .loadTransferable(type: Image.self)
+                    
+                    selectedImageData = try? await imageSelection?
+                            .loadTransferable(type: Data.self)
                 }
                 
                 VStack {
@@ -75,9 +80,12 @@ struct AddOutfitView: View {
                     ToolbarItem(placement: .confirmationAction) {
                         Button("Add", systemImage: "checkmark") {
                             // TODO: Add image pointer to DB and save it to local memory
+                            guard let imageData = selectedImageData else { return }
+                            let newClothing = Clothing(image: imageData, clothingType: clothingType)
+                            modelContext.insert(newClothing)
                             dismiss()
                         }
-                        .disabled(image == nil)
+                        .disabled(image == nil || selectedImageData == nil)
                     }
                 }
             }
@@ -93,20 +101,7 @@ struct AddOutfitView: View {
 }
 
 #Preview {
-    AddOutfitView(clothingType: .topwear)
-}
-
-
-
-enum ImageState {
-    case empty
-    case loading(Progress)
-    case success(Image)
-    case failure(Error)
-}
-
-enum TransferError: Error {
-    case importFailed
+    AddClothingView(clothingType: .topwear)
 }
 
 

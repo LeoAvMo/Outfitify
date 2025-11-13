@@ -20,7 +20,6 @@ struct PersonalizationView: View {
     @State private var weather: String?
     @State private var pattern: String?
     
-    
     @State var genImages: [CGImage]?
     @State var genereationStarted: Bool = false
     
@@ -67,55 +66,56 @@ struct PersonalizationView: View {
             }
             .navigationTitle(Text("Create \(clothingType.rawValue)"))
             
-            
-            if let image = genImages  {
-                VStack{
-                    ForEach(image, id: \.self){ selectedImage in
-                        Image(uiImage: UIImage(cgImage: selectedImage))
-                            .resizable()
-                            .frame(width: 200, height: 200)
+            Group {
+                Button {
+                    genereationStarted.toggle()
+                    Task {
+                        try await generateImage()
+                    }
+                } label: {
+                    if genereationStarted {
+                        HStack {
+                            ProgressView()
+                            Text("Generating Clothing...")
+                        }
+                        .font(.title2)
+                        .padding(7)
+                        .frame(maxWidth: .infinity)
+                        .bold()
+                    }
+                    else {
+                        HStack {
+                            Image(systemName: "apple.image.playground")
+                            Text("Generate clothing")
+                            
+                        }
+                        .font(.title2)
+                        .padding(7)
+                        .frame(maxWidth: .infinity)
+                        .bold()
                     }
                 }
-            } else {
-
-            }
-            
-            Button {
-                genereationStarted.toggle()
-                Task {
-                    try await generateImage()
-                }
-            } label: {
-                if genereationStarted {
-                    HStack {
-                        ProgressView()
-                        Text("Generating Clothing...")
-                    }
-                    .font(.title2)
-                    .padding(7)
-                    .frame(maxWidth: .infinity)
-                    .bold()
-                }
-                else {
-                    HStack {
-                        Image(systemName: "apple.image.playground")
-                        Text("Generate clothing")
-                        
-                    }
-                    .font(.title2)
-                    .padding(7)
-                    .frame(maxWidth: .infinity)
-                    .bold()
+                  .buttonStyle(.glassProminent)
+                  .padding(.horizontal)
+                  .padding(.bottom)
+                  .disabled(selectedColor == nil ||
+                            style == nil ||
+                            weather == nil ||
+                            pattern == nil ||
+                            genereationStarted == true)
                 }
             }
-              .buttonStyle(.glassProminent)
-              .padding(.horizontal)
-              .padding(.bottom)
-              .disabled(selectedColor == nil ||
-                        style == nil ||
-                        weather == nil ||
-                        pattern == nil || genereationStarted == true)
+        
+        if let image = genImages  {
+            VStack{
+                ForEach(image, id: \.self){ selectedImage in
+                    Image(uiImage: UIImage(cgImage: selectedImage))
+                        .resizable()
+                        .frame(width: 200, height: 200)
+                }
+            }
         }
+        
     }
     
     func generateImage() async throws {
@@ -124,7 +124,7 @@ struct PersonalizationView: View {
             let generationStyle = ImagePlaygroundStyle.animation
             
             let prompt = "A \(selectedColor?.name ?? "Red") \(isTop) in a \(style?.dropLast(2) ?? "basic") style and a \(pattern?.dropLast(2) ?? "plain") pattern for \(weather?.dropLast(2) ?? "sunny") weather"
-            print(prompt)
+            
             let images = imageCreator.images(
                 for: [.text(prompt)],   //Prompt
                 style: generationStyle,
