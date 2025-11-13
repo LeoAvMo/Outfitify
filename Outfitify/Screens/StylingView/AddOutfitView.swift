@@ -28,7 +28,7 @@ struct AddOutfitView: View {
                     
                     image?
                         .resizable()
-                        .scaledToFit()
+                        .clipShape(RoundedRectangle(cornerRadius: 30))
                         
                 }
                 .frame(width: 300, height: 300)
@@ -50,6 +50,7 @@ struct AddOutfitView: View {
                     }
                     .buttonStyle(.glassProminent)
                     
+                    // TODO: Make Camera work
                     Button {
                         
                     } label: {
@@ -62,15 +63,29 @@ struct AddOutfitView: View {
                         .frame(maxWidth: .infinity)
                         .bold()
                     }
-                    
                     .buttonStyle(.glass)
+                    
                 }
-                
-                
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel", systemImage: "xmark") {
+                            dismiss()
+                        }
+                    }
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Add", systemImage: "checkmark") {
+                            // TODO: Add image pointer to DB and save it to local memory
+                            dismiss()
+                        }
+                        .disabled(image == nil)
+                    }
+                }
             }
+
             .padding(.horizontal)
             .navigationTitle("Add Outfit")
             .navigationBarTitleDisplayMode(.inline)
+            
         }
     }
     

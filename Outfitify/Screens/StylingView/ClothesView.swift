@@ -127,7 +127,6 @@ struct TappableSubtitleView: View {
         
         .sheet(isPresented: $showAddView) {
             AddOutfitView(clothingType: clothingType)
-                .presentationDetents([.medium])
         }
     }
 }

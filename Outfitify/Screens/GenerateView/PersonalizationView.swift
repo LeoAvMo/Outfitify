@@ -91,6 +91,10 @@ struct PersonalizationView: View {
                         ProgressView()
                         Text("Generating Clothing...")
                     }
+                    .font(.title2)
+                    .padding(7)
+                    .frame(maxWidth: .infinity)
+                    .bold()
                 }
                 else {
                     HStack {
@@ -98,9 +102,10 @@ struct PersonalizationView: View {
                         Text("Generate clothing")
                         
                     }
-                    .font(.title)
+                    .font(.title2)
+                    .padding(7)
                     .frame(maxWidth: .infinity)
-                    .padding()
+                    .bold()
                 }
             }
               .buttonStyle(.glassProminent)
