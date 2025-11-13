@@ -79,7 +79,7 @@ struct AddClothingView: View {
                     }
                     ToolbarItem(placement: .confirmationAction) {
                         Button("Add", systemImage: "checkmark") {
-                            // TODO: Add image pointer to DB and save it to local memory
+                            
                             guard let imageData = selectedImageData else { return }
                             let newClothing = Clothing(image: imageData, clothingType: clothingType)
                             modelContext.insert(newClothing)

@@ -88,14 +88,22 @@ struct TappableSubtitleView: View {
                             } label: {
                                 ZStack{
                                     // TODO: change it to accept the data type for the Clothing
-                                    Image("placeholderClothing")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                                    if let imageData = clothing.image, let uiImage = UIImage(data: imageData) {
+                                        Image(uiImage: uiImage)
+                                            .resizable()
+                                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                                    } else {
+                                        Image("questionmark")
+                                            .resizable()
+                                            .scaledToFit()
+                                            
+                                    }
+                                    
                                     if selectedClothing == clothing {
                                         RoundedRectangle(cornerRadius: 8)
-                                            .stroke(.accent, lineWidth: 3)
+                                            .stroke(.sec, lineWidth: 3)
                                         Image(systemName: "checkmark.circle.fill")
+                                            .foregroundStyle(.sec)
                                     }
                                 }
                             }

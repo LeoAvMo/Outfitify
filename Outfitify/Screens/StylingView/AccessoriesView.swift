@@ -41,10 +41,19 @@ struct AccessoriesView: View {
                         } label: {
                             ZStack{
                                 // TODO: Change it to accept the accessory data
-                                Image("placeholderAccessory")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .clipShape(RoundedRectangle(cornerRadius: 18))
+                                if let imageData = accessory.image, let uiImage = UIImage(data: imageData) {
+                                    Image(uiImage: uiImage)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .clipShape(RoundedRectangle(cornerRadius: 18))
+                                } else {
+                                    Image("placeholderAccessory")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .clipShape(RoundedRectangle(cornerRadius: 18))
+                                }
+                                
+                                
                                 RoundedRectangle(cornerRadius: 18)
                                     .stroke(Color("secColor"), lineWidth: 3)
                             }
