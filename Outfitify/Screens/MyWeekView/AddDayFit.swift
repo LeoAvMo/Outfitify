@@ -12,6 +12,7 @@ import PhotosUI
 struct AddDayFit: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) var colorScheme
     
     @State private var imageSelection: PhotosPickerItem?
     @State private var image: Image?
@@ -22,16 +23,19 @@ struct AddDayFit: View {
         NavigationStack {
             Group {
                 ZStack {
-                    RoundedRectangle(cornerRadius: 30)
-                        .stroke(.accent, lineWidth: 5)
-                        .fill(.background)
+                    RoundedRectangle(cornerRadius: 40)
+                        .stroke(colorScheme == .dark ? Color.white : Color.black, lineWidth: image == nil ? 3 : 7)
+                        .foregroundStyle(.background)
+                        
                     
                     image?
                         .resizable()
-                        .clipShape(RoundedRectangle(cornerRadius: 30))
+                        .scaledToFill()
+                        .frame(width: 350, height: 500)
+                        .clipShape(RoundedRectangle(cornerRadius: 40))
                         
                 }
-                .frame(width: 300, height: 300)
+                .frame(width: 350, height: 500)
                 .task(id: imageSelection) {
                     image = try? await imageSelection?
                         .loadTransferable(type: Image.self)

@@ -27,7 +27,7 @@ struct MyWeekView: View {
                     
                 ZStack {
                     RoundedRectangle(cornerRadius: 40)
-                        .stroke(colorScheme == .dark ? Color.white : Color.black, lineWidth: 3)
+                        .stroke(colorScheme == .dark ? Color.white : Color.black, lineWidth: dayFit == nil ? 3 : 7)
                         .foregroundStyle(.background)
                         .frame(width: 350, height: 500)
                     
