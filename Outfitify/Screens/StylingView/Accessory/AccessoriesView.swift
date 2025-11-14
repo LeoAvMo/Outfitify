@@ -36,7 +36,7 @@ struct AccessoriesView: View {
                     
                     ForEach(accessories) { accessory in
                         NavigationLink {
-                            EditAccessoryView(accessoryToEdit: accessory)
+                            AddAccessoryView()
                         } label: {
                             ZStack{
                                 // TODO: Change it to accept the accessory data
@@ -82,9 +82,3 @@ struct AccessoriesView: View {
     AccessoriesView(showSheet: .constant(false))
 }
 
-
-struct AddAccessoryView: View {
-    var body: some View {
-        Text("Add accessory")
-    }
-}

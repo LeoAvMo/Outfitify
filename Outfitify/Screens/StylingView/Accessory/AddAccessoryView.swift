@@ -7,8 +7,7 @@
 
 import SwiftUI
 
-struct EditAccessoryView: View {
-    let accessoryToEdit: Accessory
+struct AddAccessoryView: View {
 
     var body: some View {
         NavigationStack {
@@ -22,5 +21,5 @@ struct EditAccessoryView: View {
 }
 
 #Preview {
-    EditAccessoryView(accessoryToEdit: Accessory())
+    AddAccessoryView()
 }

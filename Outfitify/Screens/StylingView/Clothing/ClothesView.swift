@@ -17,23 +17,40 @@ struct ClothesView: View {
     @State private var selectedFootwear: Clothing? = nil
     @State private var selectedLowerwear: Clothing? = nil
     
-    
+    @State private var clothingTypeToAdd: ClothingType? = nil
     var body: some View {
         NavigationStack {
             ScrollView{
                 LazyVStack(alignment: .leading, spacing: 20){
-                    ForEach(ClothingType.allCases) { clothing_type in
-                        TappableSubtitleView(clothingType: clothing_type, selectedClothing: $selectedHeadwear, clothes: clothes)
-                    }
+                    
+                    TappableSubtitleView(clothingType: .headwear, selectedClothing: $selectedHeadwear, clothes: clothes)
+                    TappableSubtitleView(clothingType: .upperwear, selectedClothing: $selectedTopwear, clothes: clothes)
+                    TappableSubtitleView(clothingType: .lowerwear, selectedClothing: $selectedLowerwear, clothes: clothes)
+                    TappableSubtitleView(clothingType: .footwear, selectedClothing: $selectedFootwear, clothes: clothes)
                 }
             }
             .toolbar {
-                Button("Add", systemImage: "plus"){
-                    
+                Menu {
+                    Button("👒 Add Headwear") {
+                        clothingTypeToAdd = .headwear
+                    }
+                    Button("👚 Add Upperwear") {
+                        clothingTypeToAdd = .upperwear
+                    }
+                    Button("👖 Add Lowerwear") {
+                        clothingTypeToAdd = .lowerwear
+                    }
+                    Button("👟 Add Footwear") {
+                        clothingTypeToAdd = .footwear
+                    }
+                } label: {
+                    Label("Add", systemImage: "plus")
                 }
             }
+            .sheet(item: $clothingTypeToAdd) { selectedType in
+                AddClothingView(clothingType: selectedType)
+            }
         }
-        
     }
 }
 
@@ -116,6 +133,9 @@ struct TappableSubtitleView: View {
             .scrollIndicators(.hidden)
             .frame(height: 88)
             Divider()
+        }
+        .onAppear {
+            selectedClothing = filteredClothes.first
         }
     }
 }

@@ -88,13 +88,9 @@ struct AddClothingView: View {
                     }
                 }
             }
-            .onAppear {
-                print(clothingType.rawValue)
-            }
             .padding(.horizontal)
-            .navigationTitle("Add Outfit")
+            .navigationTitle("Add \(clothingType.rawValue.capitalized)")
             .navigationBarTitleDisplayMode(.inline)
-            
         }
     }
     
