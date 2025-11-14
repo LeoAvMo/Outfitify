@@ -1,24 +1,24 @@
 //
-//  EditAccessoryView.swift
+//  AddDayFit.swift
 //  Outfitify
 //
-//  Created by Leonardo Avila Molina on 08/11/25.
+//  Created by Leo A.Molina on 14/11/25.
 //
 
 import SwiftUI
-import PhotosUI
 import SwiftData
+import PhotosUI
 
-struct AddAccessoryView: View {
+struct AddDayFit: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
     @State private var imageSelection: PhotosPickerItem?
     @State private var image: Image?
     @State private var selectedImageData: Data?
+    @State public var date: Date
     
     var body: some View {
-        
         NavigationStack {
             Group {
                 ZStack {
@@ -78,9 +78,9 @@ struct AddAccessoryView: View {
                     ToolbarItem(placement: .confirmationAction) {
                         Button("Add", systemImage: "checkmark") {
                             
-                            guard let imageData = selectedImageData else { return }
-                            let newAccessory = Accessory(image: imageData)
-                            modelContext.insert(newAccessory)
+                            guard let myFitData = selectedImageData else { return }
+                            let newDayFit = DayFit(date: date, image: myFitData)
+                            modelContext.insert(newDayFit)
                             dismiss()
                         }
                         .disabled(image == nil || selectedImageData == nil)
@@ -88,13 +88,12 @@ struct AddAccessoryView: View {
                 }
             }
             .padding(.horizontal)
-            .navigationTitle("Add Accessory")
+            .navigationTitle("Add Fit for \(date.formatted(date: .numeric, time: .omitted))")
             .navigationBarTitleDisplayMode(.inline)
         }
-        
     }
 }
 
 #Preview {
-    AddAccessoryView()
+    AddDayFit(date: Date.now)
 }

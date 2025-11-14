@@ -12,10 +12,12 @@ import SwiftData
 final class DayFit {
     
     var date: Date
-    var outfit: Outfit?
+    @Attribute(.externalStorage)
+    var image: Data?
     
-    init(date: Date = Date.now, outfit: Outfit? = nil) {
+    
+    init(date: Date = Date.now, image: Data? = nil){
         self.date = date
-        self.outfit = outfit
+        self.image = image
     }
 }

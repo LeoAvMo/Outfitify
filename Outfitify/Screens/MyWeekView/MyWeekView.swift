@@ -6,14 +6,20 @@
 //
 
 import SwiftUI
-
+import SwiftData
 struct MyWeekView: View {
     @State private var selectedDate: Date = Date.now
-    @State private var currentOutfit: Image? = nil
-    @State private var showAddOutfit: Bool = false
+    
+    @State private var showSheet: Bool = false
     @Environment(\.colorScheme) var colorScheme
+    @Query(sort: \DayFit.date) var dayFits: [DayFit]
     
     var body: some View {
+        // Check if there's a dayfit in that day
+        var dayFit: DayFit? {
+            dayFits.first { Calendar.current.isDate(selectedDate, equalTo: $0.date, toGranularity: .day) }
+        }
+        
         NavigationStack{
             ScrollView {
                 WeekCalendarView(selectedDate: $selectedDate)
@@ -25,40 +31,45 @@ struct MyWeekView: View {
                         .foregroundStyle(.background)
                         .frame(width: 350, height: 500)
                     
-                    if currentOutfit == nil {
-                        VStack{
-                            Button{
-                                showAddOutfit.toggle()
-                            } label: {
-                                ZStack {
-                                    Circle()
-                                        .foregroundStyle(.accent)
-                                    Image(systemName: "plus")
-                                        .foregroundStyle(.primary)
-                                        .font(.largeTitle)
+                        if let imageData = dayFit?.image, let uiImage = UIImage(data: imageData) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 350, height: 500)
+                                .clipShape(RoundedRectangle(cornerRadius: 40))
+                            
+                        } else {
+                            VStack{
+                                Button{
+                                    showSheet.toggle()
+                                } label: {
+                                    ZStack {
+                                        Circle()
+                                            .foregroundStyle(.accent)
+                                        Image(systemName: "plus")
+                                            .foregroundStyle(.primary)
+                                            .font(.largeTitle)
+                                    }
+                                    .frame(width: 70, height: 80)
                                 }
-                                .frame(width: 70, height: 80)
+                                .buttonStyle(.glassProminent)
+                                .padding(.bottom, 5)
+                                Text("Add today's look!")
+                                    .font(.title2)
                             }
-                            .buttonStyle(.glassProminent)
-                            .padding(.bottom, 5)
-                            Text("Add Outfit")
-                                .font(.title2)
-                        }
-                        .frame(width: 350, height: 500)
-                        
-                    } else {
-                        currentOutfit?
-                            .resizable()
-                            .scaledToFit()
                             .frame(width: 350, height: 500)
-                            .clipShape(RoundedRectangle(cornerRadius: 40))
                     }
                 }
             }
             .navigationTitle("My Week")
             .navigationBarTitleDisplayMode(.inline)
-            .sheet(isPresented: $showAddOutfit){
-                Text("Adding Outfit")
+            .sheet(isPresented: $showSheet){
+                AddDayFit(date: selectedDate)
+            }
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    DatePicker(selection: $selectedDate, displayedComponents: .date) {}
+                }
             }
         }
     }
@@ -144,3 +155,4 @@ struct WeekCalendarView: View {
         
     }
 }
+
