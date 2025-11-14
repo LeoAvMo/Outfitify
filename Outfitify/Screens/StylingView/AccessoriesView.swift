@@ -15,7 +15,6 @@ struct AccessoriesView: View {
     @Query private var accessories: [Accessory]
     
     var body: some View {
-        
         ScrollView {
             HStack {
                 Text("Accessories")

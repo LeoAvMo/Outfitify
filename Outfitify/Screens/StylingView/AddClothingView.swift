@@ -19,7 +19,6 @@ struct AddClothingView: View {
     @State private var image: Image?
     @State private var selectedImageData: Data?
     
-    
     var body: some View {
         NavigationStack {
             Group {
@@ -89,7 +88,9 @@ struct AddClothingView: View {
                     }
                 }
             }
-
+            .onAppear {
+                print(clothingType.rawValue)
+            }
             .padding(.horizontal)
             .navigationTitle("Add Outfit")
             .navigationBarTitleDisplayMode(.inline)
@@ -101,7 +102,7 @@ struct AddClothingView: View {
 }
 
 #Preview {
-    AddClothingView(clothingType: .topwear)
+    AddClothingView(clothingType: .upperwear)
 }
 
 

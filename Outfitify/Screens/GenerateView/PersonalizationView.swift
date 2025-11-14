@@ -24,7 +24,7 @@ struct PersonalizationView: View {
     @State var genereationStarted: Bool = false
     
     var isTop: String {
-        if clothingType == .topwear {
+        if clothingType == .upperwear {
             return "Top"
         } else {
             return clothingType.rawValue

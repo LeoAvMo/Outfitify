@@ -14,27 +14,27 @@ final class Clothing {
     @Attribute(.externalStorage)
     var image: Data?
     
-    var clothingType: ClothingType.RawValue
+    var clothingType: ClothingType
     var outfits: [Outfit]?
     
-    init(image: Data? = nil, clothingType: ClothingType = .topwear) {
+    init(image: Data? = nil, clothingType: ClothingType) {
         self.image = image
-        self.clothingType = clothingType.rawValue
+        self.clothingType = clothingType
     }
 }
 
 enum ClothingType: String, CaseIterable, Identifiable, Codable {
-    case headwear = "Headwear"
-    case topwear = "Upperwear & Full Body"
-    case lowerwear = "Lowerwear"
-    case footwear = "Footwear"
+    case headwear
+    case upperwear
+    case lowerwear
+    case footwear
     
     func emoji() -> String {
         switch self {
-        case .headwear: return "👒"
-        case .topwear: return "👚"
-        case .lowerwear: return "👖"
-        case .footwear: return "👟"
+        case .headwear: "👒"
+        case .upperwear: "👚"
+        case .lowerwear: "👖"
+        case .footwear: "👟"
         }
     }
     var id: Self { self }
