@@ -11,74 +11,69 @@ import SwiftData
 struct AccessoriesView: View {
     @Environment(\.modelContext) private var modelContext
     let columns: [GridItem] = [GridItem(.fixed(120)),GridItem(.fixed(120)),GridItem(.fixed(120))]
-    @Binding var showSheet: Bool
     @Query private var accessories: [Accessory]
+    @State private var showSheet: Bool = false
     
     var body: some View {
-        ScrollView {
-            HStack {
-                Text("Accessories")
-                    .font(.title)
-                    .foregroundStyle(.primary)
-                    .fontWeight(.semibold)
-                Spacer()
-            }
-            .padding(.horizontal)
-            if accessories.isEmpty {
-                VStack {
-                    
-                    ContentUnavailableView("No Acccesories found", systemImage: "crown.fill", description: Text("It looks like there are no accessories to display. Add a new accessory to get started!"))
-                    
+        NavigationStack {
+            ScrollView {
+                HStack {
+                    Text("Accessories")
+                        .font(.title)
+                        .foregroundStyle(.primary)
+                        .fontWeight(.semibold)
+                    Spacer()
                 }
-                
-            } else {
-                LazyVGrid(columns: columns) {
+                .padding(.horizontal)
+                if accessories.isEmpty {
+                    VStack {
+                        
+                        ContentUnavailableView("No Acccesories found", systemImage: "crown.fill", description: Text("It looks like there are no accessories to display. Add a new accessory to get started!"))
+                        
+                    }
                     
-                    ForEach(accessories) { accessory in
-                        NavigationLink {
-                            AddAccessoryView()
-                        } label: {
+                } else {
+                    LazyVGrid(columns: columns) {
+                        
+                        ForEach(accessories) { accessory in
+                            
                             ZStack{
-                                // TODO: Change it to accept the accessory data
                                 if let imageData = accessory.image, let uiImage = UIImage(data: imageData) {
                                     Image(uiImage: uiImage)
                                         .resizable()
-                                        .scaledToFit()
                                         .clipShape(RoundedRectangle(cornerRadius: 18))
                                 } else {
                                     Image("placeholderAccessory")
                                         .resizable()
-                                        .scaledToFit()
                                         .clipShape(RoundedRectangle(cornerRadius: 18))
                                 }
-                                
-                                
                                 RoundedRectangle(cornerRadius: 18)
                                     .stroke(Color("secColor"), lineWidth: 3)
                             }
                             .frame(height: 120)
-                            
                         }
                     }
                 }
+                
+                
             }
-            
-            
-        }
-        .sheet(isPresented: $showSheet) {
-            AddAccessoryView()
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button("Add", systemImage: "plus"){
-                    showSheet.toggle()
+            .sheet(isPresented: $showSheet) {
+                AddAccessoryView()
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Add", systemImage: "plus"){
+                        showSheet.toggle()
+                    }
                 }
             }
         }
+        
+        
     }
 }
 
 #Preview {
-    AccessoriesView(showSheet: .constant(false))
+    AccessoriesView()
 }
 

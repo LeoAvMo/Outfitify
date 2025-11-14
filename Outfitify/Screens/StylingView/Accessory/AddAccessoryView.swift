@@ -6,16 +6,91 @@
 //
 
 import SwiftUI
+import PhotosUI
+import SwiftData
 
 struct AddAccessoryView: View {
-
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
+    
+    @State private var imageSelection: PhotosPickerItem?
+    @State private var image: Image?
+    @State private var selectedImageData: Data?
+    
     var body: some View {
         NavigationStack {
-            // Build your editing UI here, mutating accessoryToEdit's properties directly as needed.
-            // For example:
-            // TextField("Image name", text: $accessoryToEdit.image)
-            // Note: For @Model classes, you can mutate properties directly in controls that support bindings to reference types.
-            EmptyView()
+            NavigationStack {
+                Group {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 30)
+                            .stroke(.accent, lineWidth: 5)
+                            .fill(.background)
+                        
+                        image?
+                            .resizable()
+                            .clipShape(RoundedRectangle(cornerRadius: 30))
+                            
+                    }
+                    .frame(width: 300, height: 300)
+                    .task(id: imageSelection) {
+                        image = try? await imageSelection?
+                            .loadTransferable(type: Image.self)
+                        
+                        selectedImageData = try? await imageSelection?
+                                .loadTransferable(type: Data.self)
+                    }
+                    
+                    VStack {
+                        PhotosPicker(selection: $imageSelection, matching: .images, photoLibrary: .shared()) {
+                            HStack {
+                                Image(systemName: "photo")
+                                Text("Choose image from Gallery")
+                            }
+                            .font(.title2)
+                            .padding(7)
+                            .frame(maxWidth: .infinity)
+                            .bold()
+                        }
+                        .buttonStyle(.glassProminent)
+                        
+                        // TODO: Make Camera work
+                        Button {
+                            
+                        } label: {
+                            HStack {
+                                Image(systemName: "camera.fill")
+                                Text("Take a Photo")
+                            }
+                            .font(.title2)
+                            .padding(7)
+                            .frame(maxWidth: .infinity)
+                            .bold()
+                        }
+                        .buttonStyle(.glass)
+                        
+                    }
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel", systemImage: "xmark") {
+                                dismiss()
+                            }
+                        }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Add", systemImage: "checkmark") {
+                                
+                                guard let imageData = selectedImageData else { return }
+                                let newAccessory = Accessory(image: imageData)
+                                modelContext.insert(newAccessory)
+                                dismiss()
+                            }
+                            .disabled(image == nil || selectedImageData == nil)
+                        }
+                    }
+                }
+                .padding(.horizontal)
+                .navigationTitle("Add Accessory")
+                .navigationBarTitleDisplayMode(.inline)
+            }
         }
     }
 }
