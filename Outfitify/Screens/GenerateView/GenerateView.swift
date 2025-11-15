@@ -21,13 +21,11 @@ struct GenerateView: View {
                             ClothingTypeButtonView(emoji: clothType.emoji(), clothingType: clothType.rawValue)
                         }
                     }
-                    
                 }
                 .padding()
             }
             .navigationTitle("Generate")
             .navigationBarTitleDisplayMode(.inline)
-            
         }
     }
 }
@@ -49,7 +47,7 @@ struct ClothingTypeButtonView: View {
                 Text(emoji)
                     .font(.system(size: 60))
                     .frame(width: 70)
-                Text(clothingType)
+                Text(clothingType.capitalized)
                     .font(.largeTitle)
                     .multilineTextAlignment(.leading)
                 Spacer()

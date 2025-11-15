@@ -8,12 +8,16 @@
 import SwiftUI
 import UIKit
 import ImagePlayground
+import SwiftData
 
 /*
  Programmatic Approach to IamgePlayground retrieved from:
  https://www.createwithswift.com/generating-images-programmatically-with-image-playground/
  */
 struct PersonalizationView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
+    
     @State public var clothingType: ClothingType
     @State private var selectedColor: GenerableColor?
     @State private var style: String?
@@ -21,7 +25,9 @@ struct PersonalizationView: View {
     @State private var pattern: String?
     
     @State var genImages: [CGImage]?
+    @State private var imageData: Data?
     @State var genereationStarted: Bool = false
+    @State private var showImage = false
     
     var isTop: String {
         if clothingType == .upperwear {
@@ -30,92 +36,102 @@ struct PersonalizationView: View {
             return clothingType.rawValue
         }
     }
+    
     var body: some View {
         
-        
         NavigationStack {
-            Form {
-                Picker(selection: $selectedColor, label: Text("Color")) {
-                    ForEach(generableColors, id: \.self) { col in
-                        ColorWithLabel(color: col.color, label: col.name).tag(col)
+            if let image = genImages  {
+                VStack {
+                    ForEach(image, id: \.self){ selectedImage in
+                        Image(uiImage: UIImage(cgImage: selectedImage))
+                            .resizable()
+                            .frame(width: 200, height: 200)
                     }
                 }
-                .pickerStyle(.navigationLink)
-                
-                Picker(selection: $style, label: Text("Style")) {
-                    ForEach(styles, id: \.self) { style in
-                        Text(style).tag(style)
-                    }
-                }
-                .pickerStyle(.navigationLink)
-                
-                Picker(selection: $weather, label: Text("Weather")) {
-                    ForEach(weathers, id: \.self) { weather in
-                        Text(weather).tag(weather)
-                    }
-                }
-                .pickerStyle(.navigationLink)
-                
-                Picker(selection: $pattern, label: Text("Pattern")) {
-                    ForEach(patterns, id: \.self) { pattern in
-                        Text(pattern).tag(pattern)
-                    }
-                }
-                .pickerStyle(.navigationLink)
-                
-            }
-            .navigationTitle(Text("Create \(clothingType.rawValue)"))
-            
-            Group {
-                Button {
-                    genereationStarted.toggle()
-                    Task {
-                        try await generateImage()
-                    }
-                } label: {
-                    if genereationStarted {
-                        HStack {
-                            ProgressView()
-                            Text("Generating Clothing...")
+                .navigationBarTitle("Generated \(clothingType.rawValue.capitalized)")
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Add", systemImage: "plus") {
+                            guard let clothingData = imageData else { return }
+                            let newClothing = Clothing(image: clothingData, clothingType: clothingType)
+                            modelContext.insert(newClothing)
+                            dismiss()
                         }
-                        .font(.title2)
-                        .padding(7)
-                        .frame(maxWidth: .infinity)
-                        .bold()
                     }
-                    else {
-                        HStack {
-                            Image(systemName: "apple.image.playground")
-                            Text("Generate clothing")
-                            
+                }
+            } else {
+                Form {
+                    Picker(selection: $selectedColor, label: Text("Color")) {
+                        ForEach(generableColors, id: \.self) { col in
+                            ColorWithLabel(color: col.color, label: col.name).tag(col)
                         }
-                        .font(.title2)
-                        .padding(7)
-                        .frame(maxWidth: .infinity)
-                        .bold()
                     }
+                    .pickerStyle(.navigationLink)
+                    
+                    Picker(selection: $style, label: Text("Style")) {
+                        ForEach(styles, id: \.self) { style in
+                            Text(style).tag(style)
+                        }
+                    }
+                    .pickerStyle(.navigationLink)
+                    
+                    Picker(selection: $weather, label: Text("Weather")) {
+                        ForEach(weathers, id: \.self) { weather in
+                            Text(weather).tag(weather)
+                        }
+                    }
+                    .pickerStyle(.navigationLink)
+                    
+                    Picker(selection: $pattern, label: Text("Pattern")) {
+                        ForEach(patterns, id: \.self) { pattern in
+                            Text(pattern).tag(pattern)
+                        }
+                    }
+                    .pickerStyle(.navigationLink)
+                    
                 }
-                  .buttonStyle(.glassProminent)
-                  .padding(.horizontal)
-                  .padding(.bottom)
-                  .disabled(selectedColor == nil ||
-                            style == nil ||
-                            weather == nil ||
-                            pattern == nil ||
-                            genereationStarted == true)
-                }
-            }
-        
-        if let image = genImages  {
-            VStack{
-                ForEach(image, id: \.self){ selectedImage in
-                    Image(uiImage: UIImage(cgImage: selectedImage))
-                        .resizable()
-                        .frame(width: 200, height: 200)
-                }
+                .navigationTitle(Text("Create \(clothingType.rawValue.capitalized)"))
+                
+                Group {
+                    Button {
+                        genereationStarted.toggle()
+                        Task {
+                            try await generateImage()
+                        }
+                    } label: {
+                        if genereationStarted {
+                            HStack {
+                                ProgressView()
+                                Text("Generating Clothing...")
+                            }
+                            .font(.title2)
+                            .padding(7)
+                            .frame(maxWidth: .infinity)
+                            .bold()
+                        }
+                        else {
+                            HStack {
+                                Image(systemName: "apple.image.playground")
+                                Text("Generate clothing")
+                                
+                            }
+                            .font(.title2)
+                            .padding(7)
+                            .frame(maxWidth: .infinity)
+                            .bold()
+                        }
+                    }
+                      .buttonStyle(.glassProminent)
+                      .padding(.horizontal)
+                      .padding(.bottom)
+                      .disabled(selectedColor == nil ||
+                                style == nil ||
+                                weather == nil ||
+                                pattern == nil ||
+                                genereationStarted == true)
+                    }
             }
         }
-        
     }
     
     func generateImage() async throws {
@@ -131,6 +147,10 @@ struct PersonalizationView: View {
                 limit: 1)
             
             for try await image in images {
+                
+                let uiImage = UIImage(cgImage: image.cgImage).pngData()
+                imageData = uiImage
+                
                 if let genImages = genImages {
                     self.genImages = genImages + [image.cgImage]
                 }
@@ -138,7 +158,6 @@ struct PersonalizationView: View {
                     self.genImages = [image.cgImage]
                 }
             }
-
         }
         catch ImageCreator.Error.notSupported {
             print("Image creation not supported on the current device.")
