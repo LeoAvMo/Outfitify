@@ -1,15 +1,15 @@
 //
-//  AddDayFit.swift
+//  AddOutfitView.swift
 //  Outfitify
 //
-//  Created by Leo A.Molina on 14/11/25.
+//  Created by Leo A.Molina on 15/11/25.
 //
 
 import SwiftUI
 import SwiftData
 import PhotosUI
 
-struct AddDayFit: View {
+struct AddOutfitView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) var colorScheme
@@ -17,7 +17,7 @@ struct AddDayFit: View {
     @State private var imageSelection: PhotosPickerItem?
     @State private var image: Image?
     @State private var selectedImageData: Data?
-    @State public var date: Date
+
     
     var body: some View {
         NavigationStack {
@@ -27,7 +27,6 @@ struct AddDayFit: View {
                         .stroke(colorScheme == .dark ? Color.white : Color.black, lineWidth: image == nil ? 3 : 7)
                         .foregroundStyle(.background)
                         
-                    
                     image?
                         .resizable()
                         .scaledToFill()
@@ -81,10 +80,9 @@ struct AddDayFit: View {
                     }
                     ToolbarItem(placement: .confirmationAction) {
                         Button("Add", systemImage: "checkmark") {
-                            
-                            guard let myFitData = selectedImageData else { return }
-                            let newDayFit = DayFit(date: date, image: myFitData)
-                            modelContext.insert(newDayFit)
+                            guard let outfitData = selectedImageData else { return }
+                            let newOutfit = Outfit(image: outfitData)
+                            modelContext.insert(newOutfit)
                             dismiss()
                         }
                         .disabled(image == nil || selectedImageData == nil)
@@ -92,12 +90,12 @@ struct AddDayFit: View {
                 }
             }
             .padding(.horizontal)
-            .navigationTitle("Add Fit for \(date.formatted(date: .numeric, time: .omitted))")
+            .navigationTitle("Add Outfit")
             .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
 
 #Preview {
-    AddDayFit(date: Date.now)
+    AddOutfitView()
 }

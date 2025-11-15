@@ -14,8 +14,9 @@ struct OutfitsView: View {
     @Query private var accessories: [Accessory]
     @Query private var clothes: [Clothing]
     @Query private var dayFits: [DayFit]
+    @State private var showSheet: Bool = false
     
-    let columns = [GridItem(.flexible()), GridItem(.flexible())]
+    let columns = [GridItem(.flexible()),GridItem(.flexible())]
     
     var totalOutfits: Int {
         outfits.count
@@ -100,13 +101,30 @@ struct OutfitsView: View {
                                     Image(uiImage: uiImage)
                                         .resizable()
                                         .scaledToFill()
+                                        .frame(width: 182)
                                         .clipShape(RoundedRectangle(cornerRadius: 40))
+                                        
+                                } else {
+                                    Image(systemName: "questionmark.circle")
+                                        .resizable()
+                                        .scaledToFill()
+                                        .foregroundStyle(Color.gray)
                                 }
                             }
                         }
                     }
                 }
                 .padding()
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Add Outfit", systemImage: "plus") {
+                        showSheet.toggle()
+                    }
+                }
+            }
+            .sheet(isPresented: $showSheet) {
+                AddOutfitView()
             }
             .navigationTitle("Outfits")
             .navigationBarTitleDisplayMode(.inline)

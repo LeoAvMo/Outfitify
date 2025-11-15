@@ -64,7 +64,7 @@ struct MyWeekView: View {
             .navigationTitle(selectedDate.formatted(.dateTime.month(.wide)) + " " + selectedDate.formatted(.dateTime.year()))
             .navigationBarTitleDisplayMode(.large)
             .sheet(isPresented: $showSheet){
-                AddDayFit(date: selectedDate)
+                AddDayFitView(date: selectedDate)
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
