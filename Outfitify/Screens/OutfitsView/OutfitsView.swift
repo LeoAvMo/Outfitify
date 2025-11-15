@@ -13,6 +13,7 @@ struct OutfitsView: View {
     @Query private var outfits: [Outfit]
     @Query private var accessories: [Accessory]
     @Query private var clothes: [Clothing]
+    @Query private var dayFits: [DayFit]
     
     var totalOutfits: Int {
         outfits.count
@@ -26,23 +27,55 @@ struct OutfitsView: View {
         accessories.count
     }
     
-    
+    var totalDayFits: Int {
+        dayFits.count
+    }
     
     var body: some View {
         NavigationStack {
             ScrollView {
-                HStack {
-                    TotalElementsView(total: totalOutfits, label: "Outfits")
-                    TotalElementsView(total: totalAccessories, label: "Clothes")
-                    TotalElementsView(total: totalAccessories, label: "Accessories")
+                VStack {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 40)
+                            .foregroundStyle(.accent)
+                        HStack {
+                            TotalElementsView(total: totalOutfits, label: "Outfits")
+                            TotalElementsView(total: totalClothes, label: "Clothes")
+                            TotalElementsView(total: totalAccessories, label: "Accessories")
+                        }
+                    }
+                    .frame(maxWidth: .infinity, minHeight: 100)
+                    
+                    
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 40)
+                            .foregroundStyle(.orange)
+                        HStack {
+                            Image(systemName: "flame.fill")
+                                .resizable()
+                                .frame(width: 70, height: 87)
+                                .bold()
+                                
+                            VStack {
+                                Text("\(totalDayFits)")
+                                    .font(.largeTitle)
+                                    .bold()
+                                Text("Days you've")
+                                    .multilineTextAlignment(.center)
+                                Text("looked **Fantastic!**")
+                                    .font(.title3)
+                            }
+                            .padding()
+                            
+                        }
+                    }
+                    .frame(maxWidth: .infinity, minHeight: 150)
                 }
+                .padding()
             }
             .navigationTitle("Outfits")
             .navigationBarTitleDisplayMode(.inline)
         }
-        
-        
-        
     }
 }
 
