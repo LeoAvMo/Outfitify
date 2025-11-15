@@ -15,6 +15,8 @@ struct OutfitsView: View {
     @Query private var clothes: [Clothing]
     @Query private var dayFits: [DayFit]
     
+    let columns = [GridItem(.flexible()), GridItem(.flexible())]
+    
     var totalOutfits: Int {
         outfits.count
     }
@@ -35,6 +37,15 @@ struct OutfitsView: View {
         NavigationStack {
             ScrollView {
                 VStack {
+                    HStack{
+                        Text("Wardrobe")
+                            .font(.largeTitle)
+                            .fontWeight(.semibold)
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+                    .offset(y: 15)
+                    
                     ZStack {
                         RoundedRectangle(cornerRadius: 40)
                             .foregroundStyle(.accent)
@@ -44,7 +55,7 @@ struct OutfitsView: View {
                             TotalElementsView(total: totalAccessories, label: "Accessories")
                         }
                     }
-                    .frame(maxWidth: .infinity, minHeight: 100)
+                    .frame(maxWidth: .infinity, minHeight: 100, maxHeight: 100)
                     
                     
                     ZStack {
@@ -70,6 +81,30 @@ struct OutfitsView: View {
                         }
                     }
                     .frame(maxWidth: .infinity, minHeight: 150)
+                    
+                    HStack{
+                        Text("Outfits")
+                            .font(.largeTitle)
+                            .fontWeight(.semibold)
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+                    .offset(y:15)
+                    
+                    if outfits.isEmpty {
+                        ContentUnavailableView("No Outfits", systemImage: "cabinet.fill", description: Text("Start matching new outfits to see them here!"))
+                    } else {
+                        LazyVGrid(columns: columns) {
+                            ForEach(outfits) { outfit in
+                                if let imageData = outfit.image, let uiImage = UIImage(data: imageData) {
+                                    Image(uiImage: uiImage)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .clipShape(RoundedRectangle(cornerRadius: 40))
+                                }
+                            }
+                        }
+                    }
                 }
                 .padding()
             }
