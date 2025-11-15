@@ -8,5 +8,12 @@
 import Foundation
 
 extension Calendar {
-    static let gregorian = Calendar(identifier: .gregorian)
+    static let gregorian: Calendar = {
+        var calendar = Calendar(identifier: .gregorian)
+        
+        
+        calendar.firstWeekday = 2
+        
+        return calendar
+    }()
 }
