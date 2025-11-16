@@ -12,6 +12,7 @@ struct MyWeekView: View {
     
     @State private var showSheet: Bool = false
     @State private var hideCalendar: Bool = false
+    @State private var showAlert: Bool = false
     @Environment(\.colorScheme) var colorScheme
     
     @Query(sort: \DayFit.date) var dayFits: [DayFit]
@@ -21,6 +22,12 @@ struct MyWeekView: View {
         var dayFit: DayFit? {
             dayFits.first { Calendar.gregorian.isDate(selectedDate, equalTo: $0.date, toGranularity: .day) }
         }
+        
+        var dayFitIsEmpty: Bool {
+            dayFit == nil
+        }
+        
+        // Start UI
         NavigationStack{
             ZStack {
                 VStack {
@@ -32,67 +39,20 @@ struct MyWeekView: View {
                 }
                 .frame(minWidth: 0)
                 .ignoresSafeArea(.all)
+
+                InteractiveView
                 
-                
-                HStack {
-                    
-                    VStack {
-                        HStack {
-                            Spacer()
-                        }
-                        Spacer()
-                        
-                    }
-                    .background(.black.opacity(0.1))
-                    .onTapGesture(count: 1) {
-                        selectedDate = Calendar.current.date(byAdding: .day, value: -1, to: selectedDate)!
-                    }
-                    
-                    VStack {
-                        HStack {
-                            Spacer()
-                        }
-                        Spacer()
-                    }
-                    .background(.black.opacity(0.1))
-                    .onTapGesture(count: 1) {
-                        selectedDate = Calendar.current.date(byAdding: .day, value: 1, to: selectedDate)!
-                    }
-                    
+                if dayFitIsEmpty {
+                    ButtonWithLabelView
                 }
                 
-                
-                if dayFit == nil {
-                    VStack {
-                        Button{
-                            showSheet.toggle()
-                        } label: {
-                            ZStack {
-                                Circle()
-                                    .foregroundStyle(.accent)
-                                Image(systemName: "plus")
-                                    .foregroundStyle(.primary)
-                                    .font(.largeTitle)
-                            }
-                            .frame(width: 70, height: 80)
-                        }
-                        .buttonStyle(.glassProminent)
-                        
-                        Text("Add today's look!")
-                            .font(.title2)
-                    }
-                    
-                }
-                
-                if dayFit == nil || !hideCalendar {
+                if dayFitIsEmpty || !hideCalendar {
                     VStack {
                         WeekCalendarView(selectedDate: $selectedDate)
                         Spacer()
                     }
                     .padding(.horizontal)
                 }
-                
-                
             }
             .navigationTitle(selectedDate.formatted(.dateTime.month(.wide)) + " " + selectedDate.formatted(.dateTime.year()))
             .navigationBarTitleDisplayMode(.large)
@@ -103,12 +63,68 @@ struct MyWeekView: View {
                 ToolbarItem(placement: .principal) {
                     DatePicker(selection: $selectedDate, displayedComponents: .date) {}
                 }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Hide Calendar", systemImage: "calendar") {
-                        hideCalendar.toggle()
+                
+                if !dayFitIsEmpty {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button("Delete current look", systemImage: "eraser.line.dashed.fill") {
+                            hideCalendar.toggle()
+                        }
+                    }
+                    
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button("Hide Calendar", systemImage: "calendar") {
+                            hideCalendar.toggle()
+                        }
                     }
                 }
             }
+        }
+    }
+    
+    private var InteractiveView: some View {
+        HStack {
+            VStack {
+                HStack {
+                    Spacer()
+                }
+                Spacer()
+            }
+            .background(.black.opacity(0.01))
+            .onTapGesture(count: 1) {
+                selectedDate = Calendar.current.date(byAdding: .day, value: -1, to: selectedDate)!
+            }
+            
+            VStack {
+                HStack {
+                    Spacer()
+                }
+                Spacer()
+            }
+            .background(.black.opacity(0.01))
+            .onTapGesture(count: 1) {
+                selectedDate = Calendar.current.date(byAdding: .day, value: 1, to: selectedDate)!
+            }
+        }
+    }
+    
+    private var ButtonWithLabelView: some View {
+        VStack {
+            Button{
+                showSheet.toggle()
+            } label: {
+                ZStack {
+                    Circle()
+                        .foregroundStyle(.accent)
+                    Image(systemName: "plus")
+                        .foregroundStyle(.primary)
+                        .font(.largeTitle)
+                }
+                .frame(width: 70, height: 80)
+            }
+            .buttonStyle(.glassProminent)
+            
+            Text("Add today's look!")
+                .font(.title2)
         }
     }
 }
