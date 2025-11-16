@@ -62,6 +62,7 @@ struct PersonalizationView: View {
                         }
                     }
                 }
+                .transition(.opacity)
             } else {
                 LazyVStack {
                     LazyVGrid(columns: columns){
@@ -108,8 +109,10 @@ struct PersonalizationView: View {
                         }
                         
                     }
-                }
+                .transition(.opacity)
+            }
         }
+        .animation(.easeInOut(duration: 0.5), value: genImages)
     }
     
     func generateImage() async throws {
