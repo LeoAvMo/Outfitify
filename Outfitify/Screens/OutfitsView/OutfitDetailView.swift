@@ -69,7 +69,7 @@ struct OutfitDetailView: View {
                 )
             }
             .sheet(isPresented: $showAccessoriesView) {
-                OutfitAccessoriesView()
+                OutfitAccessoriesView(outfit: outfit)
             }
             .sheet(isPresented: $showClothesView) {
                 OutfitClothesView(outfit: outfit)

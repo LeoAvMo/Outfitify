@@ -103,7 +103,7 @@ struct OutfitClothesView: View {
             }
         }
     }
-    func addRemove(clothing: Clothing) {
+    private func addRemove(clothing: Clothing) {
         if outfit.clothes.contains(clothing) {
             outfit.clothes.removeAll(where: { $0.id == clothing.id })
         } else {
