@@ -47,10 +47,11 @@ struct PersonalizationView: View {
                     ForEach(image, id: \.self){ selectedImage in
                         Image(uiImage: UIImage(cgImage: selectedImage))
                             .resizable()
-                            .frame(width: 200, height: 200)
+                            .frame(width: 350, height: 350)
+                            .clipShape(RoundedRectangle(cornerRadius: 40))
                     }
                 }
-                .navigationBarTitle("Generated \(clothingType.rawValue.capitalized)")
+                .navigationBarTitle("Add genereted \(clothingType.rawValue.capitalized)")
                 .toolbar {
                     ToolbarItem(placement: .confirmationAction) {
                         Button("Add", systemImage: "plus") {
@@ -69,72 +70,45 @@ struct PersonalizationView: View {
                         } label: {
                             ColorSelectorButtonView(generableColor: selectedColor)
                         }
-                    }
-                    
-                    
-                    Picker(selection: $style, label: Text("Style")) {
-                        ForEach(styles, id: \.self) { style in
-                            Text(style).tag(style)
+                        
+                        NavigationLink {
+                            StyleSelectorView(selectable: $style, iterable: styles)
+                        } label: {
+                            SelectorButtonView(stringToSelect: style, placeholderEmoji: "⚪️", title: "Style")
+                        }
+                        
+                        NavigationLink {
+                            StyleSelectorView(selectable: $weather, iterable: weathers)
+                        } label: {
+                            SelectorButtonView(stringToSelect: weather, placeholderEmoji: "☁️", title: "Weather")
+                        }
+                        
+                        NavigationLink {
+                            StyleSelectorView(selectable: $pattern, iterable: patterns)
+                        } label: {
+                            SelectorButtonView(stringToSelect: pattern, placeholderEmoji: "🏳️", title: "Pattern")
                         }
                     }
-                    .pickerStyle(.navigationLink)
-                    
-                    Picker(selection: $weather, label: Text("Weather")) {
-                        ForEach(weathers, id: \.self) { weather in
-                            Text(weather).tag(weather)
-                        }
-                    }
-                    .pickerStyle(.navigationLink)
-                    
-                    Picker(selection: $pattern, label: Text("Pattern")) {
-                        ForEach(patterns, id: \.self) { pattern in
-                            Text(pattern).tag(pattern)
-                        }
-                    }
-                    .pickerStyle(.navigationLink)
-                    
                 }
                 .navigationTitle(Text("Create \(clothingType.rawValue.capitalized)"))
-                
-                Group {
-                    Button {
-                        genereationStarted.toggle()
-                        Task {
-                            try await generateImage()
-                        }
-                    } label: {
-                        if genereationStarted {
-                            HStack {
-                                ProgressView()
-                                Text("Generating Clothing...")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Generate", systemImage: "apple.intelligence") {
+                            genereationStarted = true
+                            Task {
+                                try await generateImage()
                             }
-                            .font(.title2)
-                            .padding(7)
-                            .frame(maxWidth: .infinity)
-                            .bold()
                         }
-                        else {
-                            HStack {
-                                Image(systemName: "apple.image.playground")
-                                Text("Generate clothing")
-                                
-                            }
-                            .font(.title2)
-                            .padding(7)
-                            .frame(maxWidth: .infinity)
-                            .bold()
+                        .disabled(selectedColor == nil ||
+                                  style == nil ||
+                                  weather == nil ||
+                                  pattern == nil ||
+                                  genereationStarted == true)
                         }
+                        
                     }
-                      .buttonStyle(.glassProminent)
-                      .padding(.horizontal)
-                      .padding(.bottom)
-                      .disabled(selectedColor == nil ||
-                                style == nil ||
-                                weather == nil ||
-                                pattern == nil ||
-                                genereationStarted == true)
-                    }
-            }
+                }
         }
     }
     
@@ -177,25 +151,65 @@ struct ColorSelectorButtonView: View {
     public var generableColor: GenerableColor?
     
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 40)
-                .fill(LinearGradient(
-                    gradient: .init(colors: [.white, .accent.opacity(0.7), .accent.opacity(0.9), .accent]),
-                    startPoint: .topLeading,
-                      endPoint: .bottomTrailing
-                    ))
-            VStack{
-                Circle()
-                    .foregroundStyle(generableColor?.color ?? .white)
-                    .frame(width: 60, height: 60)
-                Text(generableColor?.name.capitalized ?? "None")
-                    .font(.title)
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(.black)
-                    .fontWeight(.semibold)
+        VStack(alignment: .center) {
+            Text("Color")
+                .font(.title)
+                .fontWeight(.semibold)
+            ZStack {
+                RoundedRectangle(cornerRadius: 40)
+                    .fill(LinearGradient(
+                        gradient: .init(colors: [.white, .accent.opacity(0.7), .accent.opacity(0.9), .accent]),
+                        startPoint: .topLeading,
+                          endPoint: .bottomTrailing
+                        ))
+                VStack{
+                    Circle()
+                        .foregroundStyle(generableColor?.color ?? .white)
+                        .frame(width: 60, height: 60)
+                    Text(generableColor?.name.capitalized ?? "None")
+                        .font(.title)
+                        .multilineTextAlignment(.center)
+                        .foregroundStyle(.black)
+                        .fontWeight(.semibold)
+                }
+                .padding(.horizontal)
             }
-            .padding(.horizontal)
+            .frame(height: 175)
         }
-        .frame(height: 175)
+        
+    }
+}
+
+struct SelectorButtonView: View {
+    public var stringToSelect: String?
+    public var placeholderEmoji: Character = "⚪️"
+    public var title: String
+    var body: some View {
+        VStack(alignment: .center) {
+            Text(title)
+                .font(.title)
+                .fontWeight(.semibold)
+            ZStack {
+                RoundedRectangle(cornerRadius: 40)
+                    .fill(LinearGradient(
+                        gradient: .init(colors: [.white, .accent.opacity(0.7), .accent.opacity(0.9), .accent]),
+                        startPoint: .topLeading,
+                          endPoint: .bottomTrailing
+                        ))
+                VStack{
+                    Text(String(stringToSelect?.last ?? placeholderEmoji))
+                        .font(.system(size: 60))
+                        .frame(width: 70)
+                    Text((stringToSelect ?? "None  ").capitalized.dropLast(2))
+                        .font(.title)
+                        .multilineTextAlignment(.center)
+                        .foregroundStyle(.black)
+                        .fontWeight(.semibold)
+                }
+                .padding(.horizontal)
+            }
+            .frame(height: 175)
+        }
+        
     }
 }

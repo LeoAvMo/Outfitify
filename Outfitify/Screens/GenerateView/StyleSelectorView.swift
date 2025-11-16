@@ -1,5 +1,5 @@
 //
-//  ColorSelectorView.swift
+//  StyleSelectorView.swift
 //  Outfitify
 //
 //  Created by Leo A.Molina on 16/11/25.
@@ -7,17 +7,19 @@
 
 import SwiftUI
 
-struct ColorSelectorView: View {
+struct StyleSelectorView: View {
     @Environment(\.dismiss) private var dismiss
     let columns = [GridItem(.fixed(175)), GridItem(.fixed(175))]
-    @Binding var selectedColor: GenerableColor?
+    @Binding var selectable: String?
+    @State public var iterable: [String]
+    @State public var navTitle: String = "Select Style"
     var body: some View {
         NavigationStack {
             ScrollView {
                 LazyVGrid(columns: columns) {
-                    ForEach(generableColors, id: \.self) { color in
+                    ForEach(iterable, id: \.self) { selection in
                         Button {
-                            selectedColor = color
+                            selectable = selection
                             dismiss()
                         } label: {
                             ZStack {
@@ -28,7 +30,7 @@ struct ColorSelectorView: View {
                                           endPoint: .bottomTrailing
                                         ))
                                     .overlay(alignment: .topTrailing) {
-                                        if selectedColor == color {
+                                        if selectable == selection {
                                             Image(systemName: "checkmark.circle.fill")
                                                 .foregroundStyle(.sec)
                                                 .font(.largeTitle)
@@ -37,12 +39,12 @@ struct ColorSelectorView: View {
                                         }
                                     }
                                 VStack {
-                                        Circle()
-                                            .foregroundStyle(color.color)
-                                            .frame(width: 60, height: 60)
                                     
+                                    Text(String(selection.last ?? "?"))
+                                        .font(.system(size: 60))
+                                        .frame(width: 70)
                                     
-                                    Text(color.name)
+                                    Text(String(selection.dropLast(2)))
                                         .font(.title)
                                         .multilineTextAlignment(.center)
                                         .foregroundStyle(.black)
@@ -57,13 +59,12 @@ struct ColorSelectorView: View {
                     }
                 }
             }
-            .navigationTitle("Color")
+            .navigationTitle(navTitle)
             .navigationBarTitleDisplayMode(.inline)
         }
-        
     }
 }
 
 #Preview {
-    ColorSelectorView(selectedColor: .constant(GenerableColor(name: "Red", color: .red)))
+    StyleSelectorView(selectable: .constant(nil), iterable: styles)
 }
