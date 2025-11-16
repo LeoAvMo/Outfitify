@@ -15,10 +15,10 @@ final class Outfit {
     var image: Data?
     
     @Relationship(inverse: \Clothing.outfits)
-    var clothes: [Clothing]?
+    var clothes: [Clothing] = []
     
     @Relationship(inverse: \Accessory.outfits)
-    var accessories: [Accessory]?
+    var accessories: [Accessory] = []
     
     init(image: Data? = nil) {
         self.image = image

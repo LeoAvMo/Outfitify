@@ -15,7 +15,7 @@ final class Clothing {
     var image: Data?
     
     var clothingType: ClothingType
-    var outfits: [Outfit]?
+    var outfits: [Outfit] = []
     
     init(image: Data? = nil, clothingType: ClothingType) {
         self.image = image

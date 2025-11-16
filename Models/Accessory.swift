@@ -14,7 +14,7 @@ final class Accessory {
     @Attribute(.externalStorage)
     var image: Data?
     
-    var outfits: [Outfit]?
+    var outfits: [Outfit] = []
     
     init(image: Data? = nil) {
         self.image = image

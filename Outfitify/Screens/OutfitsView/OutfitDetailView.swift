@@ -6,9 +6,16 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct OutfitDetailView: View {
     @Bindable var outfit: Outfit
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
+    
+    @State private var showAccessoriesView: Bool = false
+    @State private var showClothesView: Bool = false
+    @State private var showAlert = false
     
     private var image: Image? {
         if let imageData = outfit.image, let uiImage = UIImage(data: imageData) {
@@ -24,12 +31,11 @@ struct OutfitDetailView: View {
                 image?
                     .resizable()
                     .scaledToFill()
-                
             }
             .toolbar {
                 
                 Button("Delete", systemImage: "trash"){
-                    
+                    showAlert.toggle()
                 }
                 
                 ShareLink(item: image ?? Image("placeholderClothing"), preview: SharePreview("Outfitify", image: image ?? Image("placeholderClothing"))) {
@@ -39,10 +45,34 @@ struct OutfitDetailView: View {
             
             .toolbar{
                 ToolbarItem(placement: .bottomBar) {
-                    Button("Details", systemImage: "ellipsis"){
-                        
+                    Button("Clothing", systemImage: "crown"){
+                        showAccessoriesView.toggle()
                     }
                 }
+                ToolbarItem(placement: .bottomBar) {
+                    Button("Accessories", systemImage: "hanger"){
+                        showClothesView.toggle()
+                    }
+                }
+            }
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text("Delete Outfit"),
+                    message: Text("Are you sure you want to delete this Outfit? Deleted Outfits cannot be restored."),
+                    primaryButton: .default(
+                        Text("Cancel")
+                    ),
+                    secondaryButton: .destructive(
+                        Text("Delete"),
+                        action: deleteOutfit
+                    )
+                )
+            }
+            .sheet(isPresented: $showAccessoriesView) {
+                OutfitAccessoriesView()
+            }
+            .sheet(isPresented: $showClothesView) {
+                OutfitClothesView(outfit: outfit)
             }
             .toolbar(.hidden, for: .tabBar)
             .ignoresSafeArea(.all)
@@ -50,6 +80,11 @@ struct OutfitDetailView: View {
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
         }
+    }
+    
+    private func deleteOutfit() {
+        modelContext.delete(outfit)
+        dismiss()
     }
 }
 
