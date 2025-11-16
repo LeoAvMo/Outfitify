@@ -13,20 +13,19 @@ struct MyWeekView: View {
     @State private var showSheet: Bool = false
     @State private var hideCalendar: Bool = false
     @State private var showAlert: Bool = false
+    
     @Environment(\.colorScheme) var colorScheme
     
     @Query(sort: \DayFit.date) var dayFits: [DayFit]
+    @Environment(\.modelContext) private var modelContext
+    
+    private var dayFit: DayFit? {
+        dayFits.first { Calendar.gregorian.isDate(selectedDate, equalTo: $0.date, toGranularity: .day) }
+    }
+
+    private var dayFitIsEmpty: Bool { dayFit == nil }
     
     var body: some View {
-        // Check if there's a dayfit in that day
-        var dayFit: DayFit? {
-            dayFits.first { Calendar.gregorian.isDate(selectedDate, equalTo: $0.date, toGranularity: .day) }
-        }
-        
-        var dayFitIsEmpty: Bool {
-            dayFit == nil
-        }
-        
         // Start UI
         NavigationStack{
             ZStack {
@@ -59,6 +58,19 @@ struct MyWeekView: View {
             .sheet(isPresented: $showSheet){
                 AddDayFitView(date: selectedDate)
             }
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text(""),
+                    message: Text("The connection to the server was lost."),
+                    primaryButton: .default(
+                        Text("Cancel")
+                    ),
+                    secondaryButton: .destructive(
+                        Text("Delete"),
+                        action: deleteDayFit
+                    )
+                )
+            }
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     DatePicker(selection: $selectedDate, displayedComponents: .date) {}
@@ -67,7 +79,7 @@ struct MyWeekView: View {
                 if !dayFitIsEmpty {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button("Delete current look", systemImage: "eraser.line.dashed.fill") {
-                            hideCalendar.toggle()
+                            showAlert.toggle()
                         }
                     }
                     
@@ -78,7 +90,13 @@ struct MyWeekView: View {
                     }
                 }
             }
+            
         }
+    }
+    
+    private func deleteDayFit() {
+        guard let fit = dayFit else { return }
+        modelContext.delete(fit)
     }
     
     private var InteractiveView: some View {
@@ -204,4 +222,3 @@ struct WeekCalendarView: View {
     }
     
 }
-
