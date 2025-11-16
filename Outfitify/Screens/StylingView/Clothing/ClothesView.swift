@@ -18,6 +18,9 @@ struct ClothesView: View {
     @State private var selectedLowerwear: Clothing? = nil
     @State private var showListView: Bool = false
     @State private var clothingTypeToAdd: ClothingType? = nil
+    @State private var newOutfitData: Data?
+    @State private var showAlert: Bool = false
+    
     var body: some View {
         NavigationStack {
             ScrollView{
@@ -29,25 +32,40 @@ struct ClothesView: View {
                     TappableSubtitleView(clothingType: .footwear, selectedClothing: $selectedFootwear, clothes: clothes)
                 }
             }
+            .alert(isPresented: $showAlert) {
+                Alert(title: Text("Outfit saved successfully"), message: Text("You've successfully added a new outfit. Go to your wardrobe to see it!"), dismissButton: Alert.Button.default(Text("OK")))
+            }
             .toolbar {
-                Button("Edit", systemImage: "list.bullet") {
-                    showListView.toggle()
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Edit", systemImage: "list.bullet") {
+                        showListView.toggle()
+                    }
                 }
-                Menu {
-                    Button("👒 Add Headwear") {
-                        clothingTypeToAdd = .headwear
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
+                        Button("👒 Add Headwear") {
+                            clothingTypeToAdd = .headwear
+                        }
+                        Button("👚 Add Upperwear") {
+                            clothingTypeToAdd = .upperwear
+                        }
+                        Button("👖 Add Lowerwear") {
+                            clothingTypeToAdd = .lowerwear
+                        }
+                        Button("👟 Add Footwear") {
+                            clothingTypeToAdd = .footwear
+                        }
+                    } label: {
+                        Label("Add", systemImage: "plus")
                     }
-                    Button("👚 Add Upperwear") {
-                        clothingTypeToAdd = .upperwear
+                }
+                
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Arrange", systemImage: "cabinet.fill") {
+                        saveOutfit()
+                        showAlert.toggle()
                     }
-                    Button("👖 Add Lowerwear") {
-                        clothingTypeToAdd = .lowerwear
-                    }
-                    Button("👟 Add Footwear") {
-                        clothingTypeToAdd = .footwear
-                    }
-                } label: {
-                    Label("Add", systemImage: "plus")
                 }
             }
             .sheet(item: $clothingTypeToAdd) { selectedType in
@@ -57,6 +75,21 @@ struct ClothesView: View {
                 ClothingListView()
             }
         }
+    }
+    private func saveOutfit() {
+        let newOutfitView = ArrangedOutfitView(head: selectedHeadwear, upper: selectedTopwear, lower: selectedLowerwear, foot: selectedFootwear)
+        let outfitImage = newOutfitView.snapshot()
+        
+        guard let outfitImageData = outfitImage.pngData() else {
+            return
+        }
+        
+        let newOutfit = Outfit(image: outfitImageData)
+        let clothesToAdd = [selectedHeadwear, selectedTopwear, selectedLowerwear, selectedFootwear].compactMap { $0 }
+        newOutfit.clothes.append(contentsOf: clothesToAdd)
+        
+        modelContext.insert(newOutfit)
+        
     }
 }
 
