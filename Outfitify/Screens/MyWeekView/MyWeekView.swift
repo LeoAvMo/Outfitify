@@ -16,7 +16,6 @@ struct MyWeekView: View {
     
     @Query(sort: \DayFit.date) var dayFits: [DayFit]
     
-    
     var body: some View {
         // Check if there's a dayfit in that day
         var dayFit: DayFit? {
@@ -29,27 +28,61 @@ struct MyWeekView: View {
                         Image(uiImage: uiImage)
                             .resizable()
                             .scaledToFill()
-                    } else {
-                            Button{
-                                showSheet.toggle()
-                            } label: {
-                                ZStack {
-                                    Circle()
-                                        .foregroundStyle(.accent)
-                                    Image(systemName: "plus")
-                                        .foregroundStyle(.primary)
-                                        .font(.largeTitle)
-                                }
-                                .frame(width: 70, height: 80)
-                            }
-                            .buttonStyle(.glassProminent)
-                            
-                            Text("Add today's look!")
-                                .font(.title2)
                     }
                 }
                 .frame(minWidth: 0)
                 .ignoresSafeArea(.all)
+                
+                
+                HStack {
+                    
+                    VStack {
+                        HStack {
+                            Spacer()
+                        }
+                        Spacer()
+                        
+                    }
+                    .background(.black.opacity(0.1))
+                    .onTapGesture(count: 1) {
+                        selectedDate = Calendar.current.date(byAdding: .day, value: -1, to: selectedDate)!
+                    }
+                    
+                    VStack {
+                        HStack {
+                            Spacer()
+                        }
+                        Spacer()
+                    }
+                    .background(.black.opacity(0.1))
+                    .onTapGesture(count: 1) {
+                        selectedDate = Calendar.current.date(byAdding: .day, value: 1, to: selectedDate)!
+                    }
+                    
+                }
+                
+                
+                if dayFit == nil {
+                    VStack {
+                        Button{
+                            showSheet.toggle()
+                        } label: {
+                            ZStack {
+                                Circle()
+                                    .foregroundStyle(.accent)
+                                Image(systemName: "plus")
+                                    .foregroundStyle(.primary)
+                                    .font(.largeTitle)
+                            }
+                            .frame(width: 70, height: 80)
+                        }
+                        .buttonStyle(.glassProminent)
+                        
+                        Text("Add today's look!")
+                            .font(.title2)
+                    }
+                    
+                }
                 
                 if dayFit == nil || !hideCalendar {
                     VStack {
