@@ -15,8 +15,10 @@ struct OutfitsView: View {
     @Query private var clothes: [Clothing]
     @Query private var dayFits: [DayFit]
     @State private var showSheet: Bool = false
+    @State private var selectedOutfit: Outfit?
     
     let columns = [GridItem(.flexible()),GridItem(.flexible())]
+    let columnsPurpleGrid = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     
     var totalOutfits: Int {
         outfits.count
@@ -37,84 +39,12 @@ struct OutfitsView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack {
-                    HStack{
-                        Text("Wardrobe")
-                            .font(.largeTitle)
-                            .fontWeight(.semibold)
-                        Spacer()
-                    }
-                    .padding(.horizontal)
-                    .offset(y: 15)
+                LazyVStack{
+                    TotalsView
                     
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 40)
-                            .foregroundStyle(.accent)
-                        HStack {
-                            TotalElementsView(total: totalOutfits, label: "Outfits")
-                            TotalElementsView(total: totalClothes, label: "Clothes")
-                            TotalElementsView(total: totalAccessories, label: "Accessories")
-                        }
-                    }
-                    .frame(maxWidth: .infinity, minHeight: 100, maxHeight: 100)
-                    
-                    
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 40)
-                            .foregroundStyle(.orange)
-                        HStack {
-                            Image(systemName: "flame.fill")
-                                .resizable()
-                                .frame(width: 70, height: 87)
-                                .bold()
-                                
-                            VStack {
-                                Text("\(totalDayFits)")
-                                    .font(.largeTitle)
-                                    .bold()
-                                Text("Days you've")
-                                    .multilineTextAlignment(.center)
-                                Text("looked **Fantastic!**")
-                                    .font(.title3)
-                            }
-                            .padding()
-                            
-                        }
-                    }
-                    .frame(maxWidth: .infinity, minHeight: 150)
-                    
-                    HStack{
-                        Text("Outfits")
-                            .font(.largeTitle)
-                            .fontWeight(.semibold)
-                        Spacer()
-                    }
-                    .padding(.horizontal)
-                    .offset(y:15)
-                    
-                    if outfits.isEmpty {
-                        ContentUnavailableView("No Outfits", systemImage: "cabinet.fill", description: Text("Start matching new outfits to see them here!"))
-                    } else {
-                        LazyVGrid(columns: columns) {
-                            ForEach(outfits) { outfit in
-                                if let imageData = outfit.image, let uiImage = UIImage(data: imageData) {
-                                    Image(uiImage: uiImage)
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 182)
-                                        .clipShape(RoundedRectangle(cornerRadius: 40))
-                                        
-                                } else {
-                                    Image(systemName: "questionmark.circle")
-                                        .resizable()
-                                        .scaledToFill()
-                                        .foregroundStyle(Color.gray)
-                                }
-                            }
-                        }
-                    }
+                    OutfitsGridView
                 }
-                .padding()
+                .padding(.horizontal)
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -130,6 +60,97 @@ struct OutfitsView: View {
             .navigationBarTitleDisplayMode(.inline)
         }
     }
+    
+    private var TotalsView: some View {
+        LazyVStack {
+            HStack{
+                Text("Wardrobe")
+                    .font(.largeTitle)
+                    .fontWeight(.semibold)
+                Spacer()
+            }
+            .padding(.horizontal)
+            
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: 40)
+                    .foregroundStyle(.accent)
+                LazyVGrid(columns: columnsPurpleGrid) {
+                    TotalElementsView(total: totalOutfits, label: "Outfits")
+                    TotalElementsView(total: totalClothes, label: "Clothes")
+                    TotalElementsView(total: totalAccessories, label: "Accessories")
+                }
+                .padding()
+            }
+            .frame(maxWidth: .infinity, minHeight: 100, maxHeight: 100)
+            
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: 40)
+                    .foregroundStyle(.orange)
+                HStack {
+                    Image(systemName: "flame.fill")
+                        .resizable()
+                        .frame(width: 70, height: 87)
+                        .bold()
+                        .padding()
+                        
+                    VStack {
+                        Text("\(totalDayFits)")
+                            .font(.largeTitle)
+                            .bold()
+                        Text("Days you've")
+                            .multilineTextAlignment(.center)
+                        Text("looked **Fantastic!**")
+                            .font(.title3)
+                    }
+                }
+                .padding()
+            }
+            .frame(maxWidth: .infinity, minHeight: 150)
+        }
+    }
+    
+    private var OutfitsGridView: some View {
+        LazyVStack{
+            HStack{
+                Text("Outfits")
+                    .font(.largeTitle)
+                    .fontWeight(.semibold)
+                Spacer()
+            }
+            .padding(.horizontal)
+            .offset(y:15)
+            
+            if outfits.isEmpty {
+                ContentUnavailableView("No Outfits", systemImage: "cabinet.fill", description: Text("Start matching new outfits to see them here!"))
+            } else {
+                LazyVGrid(columns: columns) {
+                    ForEach(outfits) { outfit in
+                        Button {
+                            selectedOutfit = outfit
+                        } label: {
+                            if let imageData = outfit.image, let uiImage = UIImage(data: imageData) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 182)
+                                    .clipShape(RoundedRectangle(cornerRadius: 40))
+                            } else {
+                                Image(systemName: "questionmark.circle")
+                                    .resizable()
+                                    .scaledToFill()
+                                    .foregroundStyle(Color.gray)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    
 }
 
 #Preview {

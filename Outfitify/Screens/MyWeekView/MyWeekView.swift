@@ -29,8 +29,7 @@ struct MyWeekView: View {
         
         NavigationStack{
             ZStack {
-                
-
+        
                 InteractiveView
                 
                 if dayFitIsEmpty {
