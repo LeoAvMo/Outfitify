@@ -17,6 +17,7 @@ struct OutfitsView: View {
     @State private var showSheet: Bool = false
     @State private var selectedOutfit: Outfit?
     
+    
     let columns = [GridItem(.flexible()),GridItem(.flexible())]
     let columnsPurpleGrid = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     
@@ -127,8 +128,8 @@ struct OutfitsView: View {
             } else {
                 LazyVGrid(columns: columns) {
                     ForEach(outfits) { outfit in
-                        Button {
-                            selectedOutfit = outfit
+                        NavigationLink {
+                            OutfitDetailView(outfit: outfit)
                         } label: {
                             if let imageData = outfit.image, let uiImage = UIImage(data: imageData) {
                                 Image(uiImage: uiImage)
