@@ -26,18 +26,10 @@ struct MyWeekView: View {
     private var dayFitIsEmpty: Bool { dayFit == nil }
     
     var body: some View {
-        // Start UI
+        
         NavigationStack{
             ZStack {
-                VStack {
-                    if let imageData = dayFit?.image, let uiImage = UIImage(data: imageData) {
-                        Image(uiImage: uiImage)
-                            .resizable()
-                            .scaledToFill()
-                    }
-                }
-                .frame(minWidth: 0)
-                .ignoresSafeArea(.all)
+                
 
                 InteractiveView
                 
@@ -50,7 +42,7 @@ struct MyWeekView: View {
                         WeekCalendarView(selectedDate: $selectedDate)
                         Spacer()
                     }
-                    .padding(.horizontal)
+                    .padding()
                 }
             }
             .navigationTitle(selectedDate.formatted(.dateTime.month(.wide)) + " " + selectedDate.formatted(.dateTime.year()))
@@ -60,8 +52,8 @@ struct MyWeekView: View {
             }
             .alert(isPresented: $showAlert) {
                 Alert(
-                    title: Text(""),
-                    message: Text("The connection to the server was lost."),
+                    title: Text("Delete Look"),
+                    message: Text("Are you sure you want to delete this look? Deleted looks cannot be restored."),
                     primaryButton: .default(
                         Text("Cancel")
                     ),
@@ -84,19 +76,33 @@ struct MyWeekView: View {
                     }
                     
                     ToolbarItem(placement: .topBarTrailing) {
-                        Button("Hide Calendar", systemImage: "calendar") {
+                        Button("Hide Calendar", systemImage: hideCalendar ? "calendar.badge.plus" : "calendar.badge.minus") {
                             hideCalendar.toggle()
                         }
                     }
                 }
             }
-            
+            .background {
+                BackgroundView
+            }
         }
     }
     
     private func deleteDayFit() {
         guard let fit = dayFit else { return }
         modelContext.delete(fit)
+    }
+    
+    private var BackgroundView: some View {
+        VStack {
+            if let imageData = dayFit?.image, let uiImage = UIImage(data: imageData) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+            }
+        }
+        .ignoresSafeArea(.all)
+        .frame(minWidth: 0)
     }
     
     private var InteractiveView: some View {
@@ -156,14 +162,14 @@ struct MyWeekView: View {
 struct WeekCalendarView: View {
     @Binding var selectedDate: Date
     
-    let rows = [GridItem(.fixed(10)), GridItem(.fixed(40))]
+    let rows = [GridItem(.flexible()), GridItem(.flexible())]
     var weekdays: [Date] {
             getWeekDates(for: selectedDate, using: .gregorian)
     }
     
     var body: some View {
         
-        ZStack {
+        ZStack(alignment: .center) {
             RoundedRectangle(cornerRadius: 40)
                 .foregroundStyle(.sec)
             HStack {
@@ -175,7 +181,6 @@ struct WeekCalendarView: View {
                 }
                 .buttonStyle(.automatic)
                 .fontWeight(.semibold)
-                .padding(.bottom, 7)
                 
                 LazyHGrid(rows: rows){
                     ForEach(weekdays, id: \.self) { day in
@@ -184,7 +189,6 @@ struct WeekCalendarView: View {
                         }
                         
                         Text(day.formatted(.dateTime.weekday(.abbreviated)))
-                            .padding(.bottom, 4)
                             .bold(isSelected)
                         
                         Button {
@@ -194,18 +198,14 @@ struct WeekCalendarView: View {
                                 if isSelected {
                                     Circle()
                                         .foregroundStyle(.accent)
-                                        .scaledToFit()
                                 }
                                 Text(day.formatted(.dateTime.day()))
                                     .bold(isSelected)
                             }
-                            .frame(width: 28, height: 35)
                         }
                         .buttonStyle(.plain)
-                        
                     }
                 }
-                
                 Button {
                     selectedDate.addTimeInterval(86400*7)
                 } label: {
@@ -214,9 +214,8 @@ struct WeekCalendarView: View {
                 }
                 .buttonStyle(.automatic)
                 .fontWeight(.semibold)
-                .padding(.bottom, 7)
             }
-            .padding(.top, 12)
+            .padding()
         }
         .frame(height: 105)
     }
