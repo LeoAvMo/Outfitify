@@ -16,7 +16,7 @@ struct ClothesView: View {
     @State private var selectedTopwear: Clothing? = nil
     @State private var selectedFootwear: Clothing? = nil
     @State private var selectedLowerwear: Clothing? = nil
-    
+    @State private var showListView: Bool = false
     @State private var clothingTypeToAdd: ClothingType? = nil
     var body: some View {
         NavigationStack {
@@ -30,6 +30,9 @@ struct ClothesView: View {
                 }
             }
             .toolbar {
+                Button("Edit", systemImage: "list.bullet") {
+                    showListView.toggle()
+                }
                 Menu {
                     Button("👒 Add Headwear") {
                         clothingTypeToAdd = .headwear
@@ -49,6 +52,9 @@ struct ClothesView: View {
             }
             .sheet(item: $clothingTypeToAdd) { selectedType in
                 AddClothingView(clothingType: selectedType)
+            }
+            .sheet(isPresented: $showListView) {
+                ClothingListView()
             }
         }
     }
