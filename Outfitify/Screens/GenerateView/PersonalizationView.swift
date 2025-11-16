@@ -29,6 +29,8 @@ struct PersonalizationView: View {
     @State var genereationStarted: Bool = false
     @State private var showImage = false
     
+    let columns = [GridItem(.fixed(175)), GridItem(.fixed(175))]
+    
     var isTop: String {
         if clothingType == .upperwear {
             return "Top"
@@ -60,13 +62,15 @@ struct PersonalizationView: View {
                     }
                 }
             } else {
-                Form {
-                    Picker(selection: $selectedColor, label: Text("Color")) {
-                        ForEach(generableColors, id: \.self) { col in
-                            ColorWithLabel(color: col.color, label: col.name).tag(col)
+                LazyVStack {
+                    LazyVGrid(columns: columns){
+                        NavigationLink {
+                            ColorSelectorView(selectedColor: $selectedColor)
+                        } label: {
+                            ColorSelectorButtonView(generableColor: selectedColor)
                         }
                     }
-                    .pickerStyle(.navigationLink)
+                    
                     
                     Picker(selection: $style, label: Text("Style")) {
                         ForEach(styles, id: \.self) { style in
@@ -169,25 +173,29 @@ struct PersonalizationView: View {
     PersonalizationView(clothingType: .headwear)
 }
 
-struct ColorWithLabel: View {
-    var color: Color
-    var label: String
+struct ColorSelectorButtonView: View {
+    public var generableColor: GenerableColor?
+    
     var body: some View {
-        HStack{
-            ZStack {
+        ZStack {
+            RoundedRectangle(cornerRadius: 40)
+                .fill(LinearGradient(
+                    gradient: .init(colors: [.white, .accent.opacity(0.7), .accent.opacity(0.9), .accent]),
+                    startPoint: .topLeading,
+                      endPoint: .bottomTrailing
+                    ))
+            VStack{
                 Circle()
-                    .foregroundStyle(.primary)
-                    .frame(width: 33, height: 33)
-                
-                Circle()
-                    .foregroundStyle(color)
-                    .frame(width: 30, height: 30)
+                    .foregroundStyle(generableColor?.color ?? .white)
+                    .frame(width: 60, height: 60)
+                Text(generableColor?.name.capitalized ?? "None")
+                    .font(.title)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.black)
+                    .fontWeight(.semibold)
             }
-
-            Text(label)
+            .padding(.horizontal)
         }
-        
+        .frame(height: 175)
     }
 }
-
-
