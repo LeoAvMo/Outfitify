@@ -13,6 +13,7 @@ struct AccessoriesView: View {
     let columns: [GridItem] = [GridItem(.fixed(120)),GridItem(.fixed(120)),GridItem(.fixed(120))]
     @Query private var accessories: [Accessory]
     @State private var showSheet: Bool = false
+    @State private var showAccessoriesList: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -60,7 +61,16 @@ struct AccessoriesView: View {
             .sheet(isPresented: $showSheet) {
                 AddAccessoryView()
             }
+            .sheet(isPresented: $showAccessoriesList) {
+                AccessoriesListView()
+            }
             .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Edit", systemImage: "list.bullet") {
+                        showAccessoriesList.toggle()
+                    }
+                }
+                
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Add", systemImage: "plus"){
                         showSheet.toggle()
