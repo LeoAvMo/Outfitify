@@ -11,14 +11,23 @@ import SwiftData
 struct OutfitClothesView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @State private var clothingType: ClothingType?
     
     @Query private var clothes: [Clothing]
     @Bindable var outfit: Outfit
     
+    private var filteredClothes: [Clothing] {
+        if clothingType == nil {
+            return clothes
+        } else {
+            return clothes.filter { $0.clothingType == clothingType }
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             List {
-                ForEach(clothes) { clothing in
+                ForEach(filteredClothes) { clothing in
                     Button {
                         addRemove(clothing: clothing)
                     } label: {
@@ -39,7 +48,7 @@ struct OutfitClothesView: View {
                             
                             HStack {
                                 Text(clothing.clothingType.emoji())
-                                    .font(.title2)
+                                    .font(.title)
                                 Text("\(clothing.clothingType.rawValue.capitalized)")
                                     .font(.title2)
                                 Spacer()
@@ -47,7 +56,9 @@ struct OutfitClothesView: View {
                                 // Check if clothing's outfits is in the outfit's clothings
                                 if outfit.clothes.contains(clothing) {
                                     Image(systemName: "checkmark")
+                                        .font(.title2)
                                         .foregroundStyle(.sec)
+                                        .fontWeight(.semibold)
                                 }
                             }
                         }
@@ -55,12 +66,40 @@ struct OutfitClothesView: View {
                     
                 }
             }
+            .navigationTitle("Clothing")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Close", systemImage: "xmark") {
                         dismiss()
                     }
                 }
+                
+                ToolbarItem(placement: .topBarTrailing){
+                    Menu {
+                        Button("👗 All Clothes") {
+                            clothingType = nil
+                        }
+                        
+                        Button("👒 Headwear") {
+                            clothingType = .headwear
+                        }
+                        Button("👚 Upperwear") {
+                            clothingType = .upperwear
+                        }
+                        Button("👖 Lowerwear") {
+                            clothingType = .lowerwear
+                        }
+                        Button("👟 Footwear") {
+                            clothingType = .footwear
+                        }
+                    } label: {
+                        Label("Filter", systemImage: "line.3.horizontal.decrease")
+                    }
+                }
+                
+                
             }
         }
     }
