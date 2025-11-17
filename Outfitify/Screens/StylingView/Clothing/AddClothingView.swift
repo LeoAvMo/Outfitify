@@ -29,6 +29,7 @@ struct AddClothingView: View {
                     
                     image?
                         .resizable()
+                        .scaledToFit()
                         .clipShape(RoundedRectangle(cornerRadius: 30))
                         
                 }

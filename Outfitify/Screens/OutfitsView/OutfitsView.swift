@@ -18,7 +18,7 @@ struct OutfitsView: View {
     @State private var selectedOutfit: Outfit?
     
     
-    let columns = [GridItem(.flexible()),GridItem(.flexible())]
+    let columns = [GridItem(.fixed(180)),GridItem(.fixed(180))]
     let columnsPurpleGrid = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     
     var totalOutfits: Int {
@@ -135,7 +135,7 @@ struct OutfitsView: View {
                                 Image(uiImage: uiImage)
                                     .resizable()
                                     .scaledToFill()
-                                    .frame(width: 182)
+                                    .frame(width: 180, height: 240)
                                     .clipShape(RoundedRectangle(cornerRadius: 40))
                             } else {
                                 Image(systemName: "questionmark.circle")

@@ -27,7 +27,7 @@ struct OutfitAccessoriesView: View {
                                 if let imageData = accessory.image, let uiImage = UIImage(data: imageData) {
                                     Image(uiImage: uiImage)
                                         .resizable()
-                                        .scaledToFill()
+                                        .scaledToFit()
                                 } else {
                                     Image(systemName: "questionmark")
                                         .foregroundStyle(.secondary)

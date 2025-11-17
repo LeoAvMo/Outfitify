@@ -132,6 +132,7 @@ struct TappableSubtitleView: View {
                                 if let imageData = clothing.image, let uiImage = UIImage(data: imageData) {
                                     Image(uiImage: uiImage)
                                         .resizable()
+                                        .scaledToFit()
                                         .clipShape(RoundedRectangle(cornerRadius: 8))
                                 } else {
                                     Image("questionmark")

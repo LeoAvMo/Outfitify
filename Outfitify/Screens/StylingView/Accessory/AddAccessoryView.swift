@@ -28,6 +28,7 @@ struct AddAccessoryView: View {
                     
                     image?
                         .resizable()
+                        .scaledToFit()
                         .clipShape(RoundedRectangle(cornerRadius: 30))
                         
                 }
