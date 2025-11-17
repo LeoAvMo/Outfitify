@@ -37,21 +37,25 @@ struct AccessoriesView: View {
                     LazyVGrid(columns: columns) {
                         
                         ForEach(accessories) { accessory in
-                            
-                            ZStack{
-                                if let imageData = accessory.image, let uiImage = UIImage(data: imageData) {
-                                    Image(uiImage: uiImage)
-                                        .resizable()
-                                        .clipShape(RoundedRectangle(cornerRadius: 18))
-                                } else {
-                                    Image("placeholderAccessory")
-                                        .resizable()
-                                        .clipShape(RoundedRectangle(cornerRadius: 18))
+                            NavigationLink {
+                                AccessoryDetailView(accessory: accessory)
+                            } label: {
+                                ZStack{
+                                    if let imageData = accessory.image, let uiImage = UIImage(data: imageData) {
+                                        Image(uiImage: uiImage)
+                                            .resizable()
+                                            .clipShape(RoundedRectangle(cornerRadius: 18))
+                                    } else {
+                                        Image("placeholderAccessory")
+                                            .resizable()
+                                            .clipShape(RoundedRectangle(cornerRadius: 18))
+                                    }
+                                    RoundedRectangle(cornerRadius: 18)
+                                        .stroke(Color("secColor"), lineWidth: 3)
                                 }
-                                RoundedRectangle(cornerRadius: 18)
-                                    .stroke(Color("secColor"), lineWidth: 3)
+                                .frame(height: 120)
                             }
-                            .frame(height: 120)
+                            
                         }
                     }
                 }
@@ -61,15 +65,7 @@ struct AccessoriesView: View {
             .sheet(isPresented: $showSheet) {
                 AddAccessoryView()
             }
-            .sheet(isPresented: $showAccessoriesList) {
-                AccessoriesListView()
-            }
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Edit", systemImage: "list.bullet") {
-                        showAccessoriesList.toggle()
-                    }
-                }
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Add", systemImage: "plus"){

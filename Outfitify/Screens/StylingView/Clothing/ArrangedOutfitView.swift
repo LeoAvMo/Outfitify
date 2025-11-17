@@ -20,33 +20,32 @@ struct ArrangedOutfitView: View {
                 Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 60, height: 60)
+                    .frame(width: 250, height: 250)
             }
             
             if let imageData = upper?.image, let uiImage = UIImage(data: imageData) {
                 Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 100, height: 100)
+                    .frame(width: 500, height: 500)
             }
             
             if let imageData = lower?.image, let uiImage = UIImage(data: imageData) {
                 Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 120, height: 120)
+                    .frame(width: 500, height: 500)
             }
             
             if let imageData = foot?.image, let uiImage = UIImage(data: imageData) {
                 Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 80, height: 80)
+                    .frame(width: 250, height: 250)
             }
         }
         .scaledToFit()
-        .frame(width: 300, height: 400)
-        .background(.white)
+        .frame(width: 1200, height: 1600)
     }
 }
 
