@@ -129,14 +129,27 @@ struct PersonalizationView: View {
             
             for try await image in images {
                 
-                let uiImage = UIImage(cgImage: image.cgImage).pngData()
-                imageData = uiImage
+                let originalUIImage = UIImage(cgImage: image.cgImage)
+                
+                guard let processedUIImage = await removeBackground(from: originalUIImage) else {
+                                    print("Failed to remove background from generated image.")
+                                    continue
+                }
+                
+                guard let processedData = processedUIImage.pngData() else {
+                                    print("Failed to convert processed UIImage to PNG data.")
+                                    continue
+                                }
+                guard let processedCGImage = processedUIImage.cgImage else {
+                    print("Failed to get CGImage from processed UIImage.")
+                    continue }
+                
+                imageData = processedData
                 
                 if let genImages = genImages {
-                    self.genImages = genImages + [image.cgImage]
-                }
-                else {
-                    self.genImages = [image.cgImage]
+                    self.genImages = genImages + [processedCGImage]
+                } else {
+                    self.genImages = [processedCGImage]
                 }
             }
         }

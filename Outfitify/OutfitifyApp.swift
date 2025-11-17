@@ -15,7 +15,6 @@ struct OutfitifyApp: App {
             Outfit.self, DayFit.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-        print(URL.applicationSupportDirectory.path(percentEncoded: false))
         do {
             return try ModelContainer(for: schema, configurations: [modelConfiguration])
         } catch {

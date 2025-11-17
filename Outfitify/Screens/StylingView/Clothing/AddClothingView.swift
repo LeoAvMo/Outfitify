@@ -35,11 +35,40 @@ struct AddClothingView: View {
                 }
                 .frame(width: 300, height: 300)
                 .task(id: imageSelection) {
+                    image = nil
+                    selectedImageData = nil
+                    do {
+                        guard let originalData = try await imageSelection?.loadTransferable(type: Data.self) else { return }
+                        
+                        guard let originalUIImage = UIImage(data: originalData) else {
+                            print("Failed to create UIImage from data")
+                            return
+                        }
+                        
+                        guard let processedUIImage = await removeBackground(from: originalUIImage) else {
+                            print("Failed to remove background")
+                            return
+                        }
+                        
+                        guard let processedData = processedUIImage.pngData() else {
+                            print("Failed to convert processed UIImage to PNG data")
+                            return
+                        }
+                        
+                        selectedImageData = processedData
+                        image = Image(uiImage: processedUIImage)
+                        
+                    } catch {
+                        print("Error loading image: \(error)")
+                        // On error, image/data remain nil
+                    }
+                    /*
                     image = try? await imageSelection?
                         .loadTransferable(type: Image.self)
                     
                     selectedImageData = try? await imageSelection?
                             .loadTransferable(type: Data.self)
+                     */
                 }
                 
                 VStack {
